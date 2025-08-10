@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableSceneManager : MonoBehaviour
@@ -43,9 +44,9 @@ public class InteractableSceneManager : MonoBehaviour
     }
     #endregion
 
-    private Transform _player;
-    public Transform GetPlayer() => _player;
-    public void SetPlayer(Transform player)
+    private PlayerManager _player;
+    public PlayerManager GetPlayer() => _player;
+    public void SetPlayer(PlayerManager player)
     {
         if (_player == null)
         {
@@ -59,5 +60,23 @@ public class InteractableSceneManager : MonoBehaviour
         }
     }
 
-    //aggiungere lista di interactable per poi confrontare il graphicRaycast per evitare di colpire la NavMesh
+    private List<Interactable> _interactable = new List<Interactable>();
+    public void AddInteractable(Interactable interactable) => _interactable.Add(interactable);
+    public void RemoveInteractable(Interactable interactable) => _interactable?.Remove(interactable);
+
+    private bool _isGraphicRayCollider;
+    public bool GetIsGraphicRayCollider() => _isGraphicRayCollider;
+
+    void Update()
+    {
+        _isGraphicRayCollider = false;
+        foreach (Interactable interactable in _interactable)
+        {
+            if (interactable.gameObject.activeSelf && interactable.GetCustomButton().GetIsPointerEnter())
+            {
+                _isGraphicRayCollider = true;
+                break;
+            }
+        }
+    }
 }

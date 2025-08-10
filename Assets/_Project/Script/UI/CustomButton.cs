@@ -39,12 +39,13 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private float _timeFillMask = 0.5f;
 
     private IEnumerator _animation;
-    private bool _direction;   //true --> _position1, false --> _position0
+    private bool _isPointerEnter;   //true --> _position1, false --> _position0
+    public bool GetIsPointerEnter() => _isPointerEnter;
     private bool _isInAnimation;
     private float _fillText;
     private float _fillBorder;
     private float _fillMask;
-    private bool _isClicked;
+    private bool _isPointerDown;
 
     public UnityEvent onClickComplete;
 
@@ -122,7 +123,7 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (_mainSwitch)
         {
             //to _position1;
-            _direction = true;
+            _isPointerEnter = true;
             SetUpAnimation();
         }
     }
@@ -132,8 +133,8 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (_mainSwitch)
         {
             //to _position0;
-            _direction = false;
-            _isClicked = false;
+            _isPointerEnter = false;
+            _isPointerDown = false;
             SetUpAnimation();
         }
     }
@@ -142,7 +143,7 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         if (_mainSwitch)
         {
-            _isClicked = true;
+            _isPointerDown = true;
         }
     }
 
@@ -150,7 +151,7 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         if (_mainSwitch)
         {
-            _isClicked = false;
+            _isPointerDown = false;
         }
     }
 
@@ -176,17 +177,17 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                     _isInAnimation = false;
                     break;
                 case Status.SlideText:
-                    StatusFill(ref _fillText, _timeFillText, _direction, StatusSlideTextMax, StatusSlideTextMin, StatusSlideTextStay);
+                    StatusFill(ref _fillText, _timeFillText, _isPointerEnter, StatusSlideTextMax, StatusSlideTextMin, StatusSlideTextStay);
                     break;
                 case Status.AlphaImage:
-                    StatusFill(ref _fillBorder, _timeFillBorder, _direction, StatusAlphaImageMax, StatusAlphaImageMin, StatusAlphaImageStay);
+                    StatusFill(ref _fillBorder, _timeFillBorder, _isPointerEnter, StatusAlphaImageMax, StatusAlphaImageMin, StatusAlphaImageStay);
                     break;
                 case Status.FillMask:
-                    if (_isClicked || !_isClicked && _fillMask > 0f)
+                    if (_isPointerDown || !_isPointerDown && _fillMask > 0f)
                     {
-                        StatusFill(ref _fillMask, _timeFillMask, (_direction && _isClicked), StatusFillMaskMax, StatusFillMaskMin, StatusFillMaskStay);
+                        StatusFill(ref _fillMask, _timeFillMask, (_isPointerEnter && _isPointerDown), StatusFillMaskMax, StatusFillMaskMin, StatusFillMaskStay);
                     }
-                    else if (!_direction)
+                    else if (!_isPointerEnter)
                     {
                         _status -= 1;
                     }
@@ -209,13 +210,13 @@ public class CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         fill += Time.deltaTime / timeFill * (direction ? 1 : -1);
 
-        if (_direction && fill > 1f)
+        if (_isPointerEnter && fill > 1f)
         {
             fill = 1f;
             _status += 1;
             max.Invoke();
         }
-        else if (!_direction && fill < 0f)
+        else if (!_isPointerEnter && fill < 0f)
         {
             fill = 0f;
             _status -= 1;

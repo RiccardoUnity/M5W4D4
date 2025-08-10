@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
     [SerializeField] private RectTransform _canvas;
     private Vector3 _startScaleCanvas;
     [SerializeField] private CustomButton _customButton;
+    public CustomButton GetCustomButton() => _customButton;
 
     //Coroutine vars
     private int _awaitFrameCheckPlayer = 10;
@@ -31,6 +32,11 @@ public class Interactable : MonoBehaviour
 
     void Awake()
     {
+        if (_canvas == null)
+        {
+            _mainSwitch = false;
+            Debug.LogWarning("Manca il riferimento al componente _canvas", gameObject);
+        }
         if (_customButton == null)
         {
             _mainSwitch = false;
@@ -39,6 +45,7 @@ public class Interactable : MonoBehaviour
 
         if (_mainSwitch)
         {
+            InteractableSceneManager.Instance.AddInteractable(this);
             //Distribuisco un minimo il carico di lavoro su frame diversi per ogni istanza
             _awaitFrameCheckPlayer = Random.Range(_awaitFrameCheckPlayer - 5, _awaitFrameCheckPlayer + 5);
             _checkPlayer = CheckPlayer();
@@ -57,7 +64,7 @@ public class Interactable : MonoBehaviour
     {
         if (_mainSwitch)
         {
-            _player = InteractableSceneManager.Instance.GetPlayer();
+            _player = InteractableSceneManager.Instance.GetPlayer().transform;
 
             _startScaleCanvas = _canvas.localScale;
             _canvas.localScale = Vector3.zero;
