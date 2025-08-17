@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     {
         Debug.Log("Player chiama InteractableSceneManager");
         InteractableSceneManager.Instance.SetPlayer(this);
+
         _playerController = GetComponentInChildren<PlayerController>();
     }
 

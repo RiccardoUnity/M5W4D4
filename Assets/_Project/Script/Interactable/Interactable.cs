@@ -8,8 +8,8 @@ public class Interactable : MonoBehaviour
     private Transform _player;
     [SerializeField] private RectTransform _canvas;
     private Vector3 _startScaleCanvas;
-    [SerializeField] private CustomButton _customButton;
-    public CustomButton GetCustomButton() => _customButton;
+    [SerializeField] private UI_CustomButton _customButton;
+    public UI_CustomButton GetCustomButton() => _customButton;
 
     //Coroutine vars
     private int _awaitFrameCheckPlayer = 10;

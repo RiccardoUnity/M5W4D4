@@ -40,10 +40,19 @@ public class InteractableSceneManager : MonoBehaviour
         if (_instance == this)
         {
             _instance = null;
+            _count = 0;
+        }
+        else
+        {
+            if (transform.parent != null)
+            {
+                _instance.transform.parent = transform.parent;
+            }
         }
     }
     #endregion
 
+    #region Player
     private PlayerManager _player;
     public PlayerManager GetPlayer() => _player;
     public void SetPlayer(PlayerManager player)
@@ -59,10 +68,12 @@ public class InteractableSceneManager : MonoBehaviour
             Destroy(player.gameObject);
         }
     }
+    #endregion
 
-    private List<Interactable> _interactable = new List<Interactable>();
-    public void AddInteractable(Interactable interactable) => _interactable.Add(interactable);
-    public void RemoveInteractable(Interactable interactable) => _interactable?.Remove(interactable);
+    #region Interactable
+    private List<Interactable> _interactables = new List<Interactable>();
+    public void AddInteractable(Interactable interactable) => _interactables.Add(interactable);
+    public void RemoveInteractable(Interactable interactable) => _interactables?.Remove(interactable);
 
     private bool _isGraphicRayCollider;
     public bool GetIsGraphicRayCollider() => _isGraphicRayCollider;
@@ -70,7 +81,7 @@ public class InteractableSceneManager : MonoBehaviour
     void Update()
     {
         _isGraphicRayCollider = false;
-        foreach (Interactable interactable in _interactable)
+        foreach (Interactable interactable in _interactables)
         {
             if (interactable.gameObject.activeSelf && interactable.GetCustomButton().GetIsPointerEnter())
             {
@@ -79,4 +90,5 @@ public class InteractableSceneManager : MonoBehaviour
             }
         }
     }
+    #endregion
 }
