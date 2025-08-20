@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FSM_S_Chat
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 84700fc7255a1314b8d41e0d64dbc182,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _startWithThisState
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _UI_ChatEvent
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _maxTimeAnswer
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionsLevel0.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionsLevel0.Array.data[0]
+    value: Saluti straniero
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answersLevel0.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answersLevel0.Array.data[0]
+    value: Cosa vuoi dire, non capisco
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionsLevel1.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionsLevel1.Array.data[0]
+    value: Parlando d'altro, hai visto un tipo sospetto?
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answersLevel1.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answersLevel1.Array.data[0]
+    value: Non lo avrei mai detto
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionsLevel2.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionsLevel2.Array.data[0]
+    value: "Come mai sei da queste parti? \xC8 una zona riservata questa"
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answersLevel2.Array.size
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answersLevel2.Array.data[0]
+    value: Non ti credo neanche un po'
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _questionCodeId
+    value: Dimmi il tuo codice identificativo
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answerCodeIdCorrect
+    value: Scusami agente, non avevo idea che lei fosse sotto copertura
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: _answerCodeIdWrong
+    value: Non mi incanti sai, ora ti porto dentro
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

@@ -4,6 +4,8 @@ public class PlayerManager : MonoBehaviour
 {
     private PlayerController _playerController;
     public PlayerController GetPlayerController() => _playerController;
+    [SerializeField] private UI_CanvasOverlay _canvasOverload;
+    public UI_CanvasOverlay GetCanvasOverload() => _canvasOverload;
 
     private Camera _camera;
     private Quaternion _deltaRotationMove;
@@ -22,6 +24,11 @@ public class PlayerManager : MonoBehaviour
         InteractableSceneManager.Instance.SetPlayer(this);
 
         _playerController = GetComponentInChildren<PlayerController>();
+
+        if (_canvasOverload == null)
+        {
+            Debug.LogError("Manca il riferimento al canvas", gameObject);
+        }
     }
 
     void Start()

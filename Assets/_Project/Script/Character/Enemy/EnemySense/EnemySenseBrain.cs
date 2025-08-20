@@ -1,7 +1,7 @@
 using GM;
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterChat))]
+[RequireComponent(typeof(CharacterBrain))]
 [RequireComponent(typeof(Enemy_FSM_Controller))]
 [RequireComponent(typeof(EnemyHear))]
 [RequireComponent(typeof(EnemyView))]
@@ -9,19 +9,20 @@ public class EnemySenseBrain : MonoBehaviour
 {
     private Detected _detected;
 
-    private CharacterChat _myCharacterChat;
+    private CharacterBrain _brain;
     private Enemy_FSM_Controller _fsmController;
     private EnemyHear _enemyHear;
     private EnemyView _enemyView;
 
-    private CharacterChat _target;
-    public CharacterChat GetTarget() => _target;
+    private CharacterBrain _target;
+    public CharacterBrain GetTarget() => _target;
+    public bool IsTargetNull() => _target == null;
     private Vector3 _targetV3;
     public Vector3 GetTargetV3() => _targetV3;
 
     private void Awake()
     {
-        _myCharacterChat = GetComponent<CharacterChat>();
+        _brain = GetComponent<CharacterBrain>();
         _fsmController = GetComponent<Enemy_FSM_Controller>();
         _enemyHear = GetComponent<EnemyHear>();
         _enemyView = GetComponent<EnemyView>();
@@ -35,15 +36,15 @@ public class EnemySenseBrain : MonoBehaviour
             _target = null;
 
             //La vista ha la priorità sull'udito
-            CharacterChat[] characterChats = _enemyView.See(this);
+            CharacterBrain[] characterChats = _enemyView.See(this);
 
-            foreach (CharacterChat character in characterChats)
+            foreach (CharacterBrain character in characterChats)
             {
-                if (character != _myCharacterChat)
+                if (character != _brain)
                 {
-                    if (_myCharacterChat.IsAlreadyMet(character))
+                    if (_brain.IsAlreadyMet(character))
                     {
-                        if (character.GetPlayerManager() != null)
+                        if (character.GetIsPlayer())
                         {
                             //È il Player
                             _detected = Detected.Player;

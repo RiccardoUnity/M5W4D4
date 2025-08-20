@@ -118,7 +118,7 @@ public class UI_CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         _fillMask = 0f;
     }
 
-    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         if (_mainSwitch)
         {
@@ -128,7 +128,7 @@ public class UI_CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
     }
 
-    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
         if (_mainSwitch)
         {

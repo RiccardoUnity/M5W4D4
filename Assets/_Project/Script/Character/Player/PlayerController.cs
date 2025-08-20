@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
             if (_playerManager.GetMove() == Vector3.zero)
             {
                 //IMPORTANTE !!! - Ricordati di escludere il canvas in overlay
-                if (_playerManager.GetHasRay() && !InteractableSceneManager.Instance.GetIsGraphicRayCollider())
+                if (_playerManager.GetHasRay() && !_playerManager.GetCanvasOverload().IsPointerOnOverlay() && !InteractableSceneManager.Instance.GetIsGraphicRayCollider())
                 {
                     if (Physics.Raycast(_playerManager.GetRay(), out _hit))
                     {

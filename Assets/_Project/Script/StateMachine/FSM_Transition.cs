@@ -110,6 +110,7 @@ public class FSM_Transition
     }
 
     private GameObject _gameObject;
+    private string _myNameState;
     private FSM_Condition[] _conditions;
     private bool[] _valueConditions;
 
@@ -117,9 +118,10 @@ public class FSM_Transition
 
     private bool _mainSwitch = true;
 
-    public FSM_Transition(GameObject gameObject, int numberOfConditions, FSM_BaseState nextState)
+    public FSM_Transition(GameObject gameObject, string myNameState, int numberOfConditions, FSM_BaseState nextState)
     {
         _gameObject = gameObject;
+        _myNameState = myNameState;
         _conditions = new FSM_Condition[numberOfConditions];
         _valueConditions = new bool[numberOfConditions];
         if (nextState != null)
@@ -161,7 +163,7 @@ public class FSM_Transition
     {
         if (_mainSwitch)
         {
-            if (index >= 0 && _conditions.Length < index)
+            if (index >= 0 && index < _conditions.Length)
             {
                 if (_conditions[index] == null)
                 {
@@ -169,12 +171,12 @@ public class FSM_Transition
                 }
                 else
                 {
-                    Debug.LogError("Condizione già esistente, non sovrascrivibile", _gameObject);
+                    Debug.LogError($"Condizione già esistente, non sovrascrivibile, {_myNameState}", _gameObject);
                 }
             }
             else
             {
-                Debug.LogError("Condizione non registrata, StackOverFlow", _gameObject);
+                Debug.LogError($"Condizione non registrata, StackOverFlow, {_myNameState}", _gameObject);
             }
         }
         return false;
@@ -196,6 +198,7 @@ public class FSM_Transition
                     return null;
                 }
             }
+            Debug.Log($"Transizione {_myNameState} --> {_nextState.NameState}, GameObject {_gameObject.name}");
             return _nextState;
         }
         return null;

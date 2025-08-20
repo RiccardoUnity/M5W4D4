@@ -6,12 +6,12 @@ using GSM = GM.GameStaticManager;
 //Enemy in movimento sul suo percorso, sensorialità media
 public class FSM_S_Patrol : FSM_BaseState
 {
-    public override string NameState { get => NameState; protected set => NameState = GSM.GetStatePatrol(); }
+    public override string NameState { get => GSM.GetStatePatrol(); }
 
-    [SerializeField] private Path _path;
     private NavMeshAgent _agent;
+    [SerializeField] private Path _path;
 
-    private float _stopRemaningDistance = 0.2f;
+    private float _stoppingDistancePoint = 0.1f;
     private bool _hasDestination;
     public bool GetHasDestination() => _hasDestination;
     public void SetHasDestinationFalse() => _hasDestination = false;
@@ -28,21 +28,26 @@ public class FSM_S_Patrol : FSM_BaseState
 
     void Start()
     {
-        _transitions = new FSM_Transition[2];
+        _transitions = new FSM_Transition[3];
 
-        //Transizione: Individuato Unknown o Player --> Alert
-        _transitions[0] = new FSM_Transition(gameObject, 2, _fsmController.GetStateByName(GSM.GetStateAlert()));
-        _transitions[0].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Unknown);
-        _transitions[0].SetCondition(1, _fsmController.GetDetected, Logic.Equal, Detected.Player);
+        //Transizione: se individuo il Player --> Alert
+        _transitions[0] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[0].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Player);
 
-        //Transizione: Arrivo a destinazione --> Idle
-        _transitions[1] = new FSM_Transition(gameObject, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
-        _transitions[1].SetCondition(0, GetHasDestination, Logic.Equal, false);
+        //Transizione: se individuo Unknown --> Alert
+        _transitions[1] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[1].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Unknown);
+
+        //Transizione: se arrivo a destinazione --> Idle
+        _transitions[2] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[2].SetCondition(0, GetHasDestination, Logic.Equal, false);
     }
 
     public override void StateEnter()
     {
         base.StateEnter();
+
+        _agent.stoppingDistance = _stoppingDistancePoint;
         if (!_hasDestination)
         {
 
@@ -50,6 +55,9 @@ public class FSM_S_Patrol : FSM_BaseState
             {
                 case EnterPointType.None:
                     _destination = _path.GetCurrentPoint();
+                    break;
+                case EnterPointType.Next:
+                    _destination = _path.GetNextPoint();
                     break;
                 case EnterPointType.Random:
                     _destination = _path.GetRandomPoint();
@@ -63,16 +71,18 @@ public class FSM_S_Patrol : FSM_BaseState
         _agent.SetDestination(_destination);
     }
 
-    public override void StateUpdate()
+    public override void StateUpdate(float time)
     {
-        if (_agent.remainingDistance < _stopRemaningDistance)
+        base.StateUpdate(time);
+        if (_agent.remainingDistance <= _agent.stoppingDistance)
         {
+            _pointType = EnterPointType.Next;
             SetHasDestinationFalse();
         }
     }
 
     public override void StateExit()
     {
-
+        _agent.ResetPath();
     }
 }

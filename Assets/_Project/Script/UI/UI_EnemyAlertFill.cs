@@ -19,11 +19,15 @@ public class UI_EnemyAlertFill : MonoBehaviour
         _bar.rectTransform.localScale = _scale;
     }
 
+    void LateUpdate()
+    {
+        transform.rotation = _camera.rotation;
+    }
+
     public void AlertChange(Enemy_FSM_Controller controller, float x)
     {
         if (controller == _controller)
         {
-            transform.rotation = _camera.rotation;  //Anche se non lo aggiorno ad ogni frame non si nota
             _scale.x = x;
             _bar.rectTransform.localScale = _scale;
             _bar.color = _gradient.Evaluate(x);

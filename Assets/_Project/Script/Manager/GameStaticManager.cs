@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,8 +46,18 @@ namespace GM
     public enum EnterPointType
     {
         None,
+        Next,
         Random,
         Closest,
+    }
+
+    public enum AnswerType
+    {
+        None,
+        ID,
+        Player,
+        Return,
+        Chase
     }
 
     public static class GameStaticManager
@@ -55,10 +66,13 @@ namespace GM
         public static string GetStatePatrol() => "Patrol";
         public static string GetStateSpin() => "Spin";
         public static string GetStateAlert() => "Alert";
+        public static string GetStateCallHelp() => "CallHelp";
         public static string GetStateChat() => "Chat";
         public static string GetStateChase() => "Chase";
         public static string GetStateSearch() => "Search";
         public static string GetStateTake() => "Take";
+
+        public const int _numberAnswers = 4; 
     }
 }
 

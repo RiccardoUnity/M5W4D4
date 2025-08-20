@@ -55,15 +55,15 @@ public class EnemySceneManager : MonoBehaviour
 
     #region Enemy
     //Volevo simulare un semplicissimo sistema di accesso ...
-    private Dictionary<int, CharacterChat> _enemies = new Dictionary<int, CharacterChat>();
+    private Dictionary<string, CharacterBrain> _enemies = new Dictionary<string, CharacterBrain>();
 
-    public int AddEnemy(CharacterChat enemy)
+    public string AddEnemy(CharacterBrain enemy)
     {
-        int id = 0;
+        string id = "";
         bool stay = true;
         while (stay)
         {
-            id = Random.Range(0, 10000);
+            id = Random.Range(0, 1000).ToString();
             if (!_enemies.ContainsKey(id))
             {
                 stay = false;
@@ -72,7 +72,7 @@ public class EnemySceneManager : MonoBehaviour
         _enemies.Add(id, enemy);
         return id;
     }
-    public bool RemoveEnemy(int id)
+    public bool RemoveEnemy(string id)
     {
         if (_enemies.ContainsKey(id))
         {
@@ -81,11 +81,46 @@ public class EnemySceneManager : MonoBehaviour
         }
         return false;
     }
+
+    public bool IsEnemyIDValid(string id) => _enemies.ContainsKey(id);
+
+    public CharacterBrain GetEnemyByID(string id)
+    {
+        if (IsEnemyIDValid(id))
+        {
+            return _enemies[id];
+        }
+        return null;
+    }
+
+    //Funzione molto "potente", per questo ci sono tutti questi controlli
+    public bool SwitchOffAllEnemy(Enemy_FSM_Controller fsmController, string id)
+    {
+        if (IsEnemyIDValid(id))
+        {
+            if (GetEnemyByID(id).GetComponent<Enemy_FSM_Controller>() == fsmController)
+            {
+                if (fsmController.IsCurrentStateTake())
+                {
+                    _generalSwich = false;
+                    foreach (CharacterBrain character in _enemies.Values)
+                    {
+                        character.GetComponent<Enemy_FSM_Controller>().MainSwitchOff();
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //L'unica funzione che cambia questo valore è SwitchOffAllEnemy
+    private bool _generalSwich = true;
+    public bool GetGeneralSwich() => _generalSwich;
     #endregion
 
     #region Target
     private Vector3 _targetPosition;
-    public void SetTarget(int id, Vector3 targetPosition)
+    public void SetTarget(string id, Vector3 targetPosition)
     {
         if (_enemies.ContainsKey(id))
         {

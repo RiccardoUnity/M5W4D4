@@ -1,7 +1,7 @@
 using UnityEngine;
 
-public class Distraction : MonoBehaviour, I_Meet
+public class Distraction : MonoBehaviour
 {
-    public PlayerManager GetPlayerManager() => null;
+    
 
 }

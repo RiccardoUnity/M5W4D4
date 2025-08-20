@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f87e3d87067d71438b1d836c8c7a007, type: 3}
+  m_Name: 0_Level
+  m_EditorClassIdentifier: 
+  _answerLevel: 0
+  _questions:
+  - _useNumericKeypad: 0
+    _question: Alt! Si fermi!
+    _answers:
+    - Boh
+    - Non so
+    - Qualcosa
+    - Divertente
+    _afterAnswer: "\xC8 questo il modo di rivolgersi!?"
