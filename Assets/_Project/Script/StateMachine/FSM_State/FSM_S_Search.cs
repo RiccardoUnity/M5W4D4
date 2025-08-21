@@ -31,23 +31,25 @@ public class FSM_S_Search : FSM_BaseState
         _agent = GetComponentInParent<NavMeshAgent>();
         _randomV3 = new Vector3[_randomPoints];
         _path = new NavMeshPath();
+        _useStep = true;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         _transitions = new FSM_Transition[3];
 
         //Transizione: se individuo il Player --> Chase
-        _transitions[0] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
         _transitions[0].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Player);
 
         //Transizione: se individuo Unknown --> Alert
-        _transitions[1] = new FSM_Transition(gameObject, NameState, 2, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 2, _fsmController.GetStateByName(GSM.GetStateAlert()));
         _transitions[1].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Unknown);
         _transitions[1].SetCondition(1, _fsmController.GetSenseBrain().IsTargetNull, Logic.Equal, false);
 
         //Transizione: se non trovo nulla --> Idle
-        _transitions[2] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[2] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[2].SetCondition(0, IsVisitedAllPoints, Logic.Equal, true);
     }
 

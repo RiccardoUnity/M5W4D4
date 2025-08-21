@@ -24,22 +24,24 @@ public class FSM_S_Patrol : FSM_BaseState
         _detectionWidth = 0.5f;
         base.Awake();
         _agent = GetComponentInParent<NavMeshAgent>();
+        _useStep = true;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         _transitions = new FSM_Transition[3];
 
         //Transizione: se individuo il Player --> Alert
-        _transitions[0] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
         _transitions[0].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Player);
 
         //Transizione: se individuo Unknown --> Alert
-        _transitions[1] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
         _transitions[1].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Unknown);
 
         //Transizione: se arrivo a destinazione --> Idle
-        _transitions[2] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[2] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[2].SetCondition(0, GetHasDestination, Logic.Equal, false);
     }
 

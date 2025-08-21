@@ -20,7 +20,9 @@ namespace GM
     {
         None,
         Hit,
-        Step
+        StepEnemy,
+        ChatEnemy,
+        StepPlayer
     }
 
     //Condizione delle transizioni
@@ -67,6 +69,7 @@ namespace GM
         public static string GetStateSpin() => "Spin";
         public static string GetStateAlert() => "Alert";
         public static string GetStateCallHelp() => "CallHelp";
+        public static string GetStateAnswerCallHelp() => "AnswerCallHelp";
         public static string GetStateChat() => "Chat";
         public static string GetStateChase() => "Chase";
         public static string GetStateSearch() => "Search";

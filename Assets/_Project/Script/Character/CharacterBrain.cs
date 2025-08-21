@@ -15,15 +15,19 @@ public class CharacterBrain : MonoBehaviour
     private string _id;
     public string GetID() => _id;
     private Enemy_FSM_Controller _fsmController;
-    private FSM_S_Chat _fsmStateChat;
-    public FSM_S_Chat GetFSMStateChat() => _fsmStateChat;
     private List<CharacterBrain> _metCharacters = new List<CharacterBrain>();
+
+    private FSM_S_Chat _fsmChat;
+    public FSM_S_Chat GetFSMStateChat() => _fsmChat;
+    [HideInInspector] public FSM_S_CallHelp fsmCallHelp;
+    public bool IsSomeoneCallMe() => fsmCallHelp != null;
 
     private IEnumerator _internalTimer;
     public bool IsInternalTimerNull() => _internalTimer == null;
     private const float _maxTimer_c = 10f;
     private const float _minTimer_c = 5f;
     private float _timer;
+    public float GetTimer() => _timer;
     private float _timerCoroutine;
     public void SetTimerCoroutineZero() => _timerCoroutine = 0f;
 
@@ -44,9 +48,9 @@ public class CharacterBrain : MonoBehaviour
 
     public bool SetMyStateChat(Enemy_FSM_Controller fsmController, FSM_S_Chat fsmStateChat)
     {
-        if (_fsmController == fsmController && _fsmStateChat == null)
+        if (_fsmController == fsmController && _fsmChat == null)
         {
-            _fsmStateChat = fsmStateChat;
+            _fsmChat = fsmStateChat;
             return true;
         }
         Debug.LogError("Non è stato possibile settare lo stato Chat nel CharacterBrain", gameObject);
@@ -83,7 +87,7 @@ public class CharacterBrain : MonoBehaviour
 
     public void AddCharacter(FSM_S_Chat fsmStateChat, CharacterBrain character)
     {
-        if (fsmStateChat == _fsmStateChat && character != null)
+        if (fsmStateChat == _fsmChat && character != null)
         {
             _metCharacters.Add(character);
         }
@@ -114,14 +118,12 @@ public class CharacterBrain : MonoBehaviour
     }
 
     //È più probabile che i character ad essere aggiunti alla lista siano anche i più vicini fisicamente
-    public CharacterBrain GetRandomEnemyKnow()
+    public CharacterBrain GetEnemyKnow(int index)
     {
-        CharacterBrain character;
-        do
+        if (_metCharacters.Count > 0)
         {
-            character = _metCharacters[Random.Range(0, _metCharacters.Count)];
+            return _metCharacters[index];
         }
-        while (character.GetIsPlayer() && _metCharacters.Count > 0);
-        return character;
+        return null;
     }
 }

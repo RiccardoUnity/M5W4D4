@@ -75,7 +75,14 @@ public class EnemySenseBrain : MonoBehaviour
 
             if (_target == null && _enemyHear.Felt())
             {
-                _detected = Detected.Unknown;
+                if (_enemyHear.GetLastNoiseType() == NoiseType.StepEnemy && _brain.IsAlreadyMet(_enemyHear.GetCharacterBrainListened()))
+                {
+                    _detected = Detected.Known;
+                }
+                else
+                {
+                    _detected = Detected.Unknown;
+                }
                 _targetV3 = _enemyHear.GetPositionTarget();
             }
 
@@ -91,4 +98,6 @@ public class EnemySenseBrain : MonoBehaviour
             _enemyView.ChangeFocusAngle(this, value);
         }
     }
+
+    public NoiseType GetLastNoiseType() => _enemyHear.GetLastNoiseType();
 }

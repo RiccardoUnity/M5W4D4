@@ -23,26 +23,28 @@ public class FSM_S_Alert : FSM_BaseState
         base.Awake();
         _agent = GetComponentInParent<NavMeshAgent>();
         _path = new NavMeshPath();
+        _useStep = true;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         _transitions = new FSM_Transition[4];
 
         //Transizione: Ho percepito il Player --> Chase
-        _transitions[0] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
+        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
         _transitions[0].SetCondition(0, GetIsTargetPlayer, Logic.Equal, true);
 
         //Transizione: Ha raggiunto il target --> Chat
-        _transitions[1] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChat()));
+        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChat()));
         _transitions[1].SetCondition(0, TryToChat, Logic.Equal, true);
 
         //Transizione: Ha raggiunto la posizione del target --> Search
-        _transitions[2] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateSearch()));
+        _transitions[2] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateSearch()));
         _transitions[2].SetCondition(0, TryToSearch, Logic.Equal, true);
 
         //Transizione: Non ho un percorso valido per indagare --> CallHelp
-        _transitions[3] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateCallHelp()));
+        _transitions[3] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateCallHelp()));
         _transitions[3].SetCondition(0, GetPathValid, Logic.Equal, false);
     }
 

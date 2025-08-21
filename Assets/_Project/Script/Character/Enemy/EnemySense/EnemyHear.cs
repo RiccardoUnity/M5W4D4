@@ -8,9 +8,12 @@ public class EnemyHear : MonoBehaviour
 {
     private EnemySenseBrain _brain;
 
+    private CharacterBrain _characterListened;
+    public CharacterBrain GetCharacterBrainListened() => _characterListened;
     private Vector3 _positionTarget;
     public Vector3 GetPositionTarget() => _positionTarget;
-    private NoiseType _lastTypeNoise;
+    private NoiseType _lastNoiseType;
+    public NoiseType GetLastNoiseType() => _lastNoiseType;
     private float _lastIntensity = 1f;
 
     private IEnumerator _lastListen;
@@ -21,17 +24,18 @@ public class EnemyHear : MonoBehaviour
         _brain = GetComponent<EnemySenseBrain>();
     }
 
-    public void Listen(Vector3 position, NoiseType typeNoise, float intensity)
+    public void Listen(Vector3 position, NoiseType typeNoise, float intensity, CharacterBrain character)
     {
         //Vince il suono con l'indice (importanza) più alto
-        if (_lastTypeNoise < typeNoise)
+        if (_lastNoiseType < typeNoise)
         {
             //Vince il suono più vicino a 0
             if (intensity < _lastIntensity)
             {
                 _positionTarget = position;
-                _lastTypeNoise = typeNoise;
+                _lastNoiseType = typeNoise;
                 _lastIntensity = intensity;
+                _characterListened = character;
                 if (_lastListen == null)
                 {
                     _lastListen = LastListen();
@@ -49,9 +53,9 @@ public class EnemyHear : MonoBehaviour
             yield return null;
             _lastIntensity += Time.deltaTime / _coeffTime;  //Dopo _coeffTime secondi aumenta di 1
         }
-        _lastTypeNoise = NoiseType.None;
+        _lastNoiseType = NoiseType.None;
         _lastListen = null;
     }
 
-    public bool Felt() => (_lastTypeNoise != NoiseType.None)? true : false;
+    public bool Felt() => (_lastNoiseType != NoiseType.None)? true : false;
 }

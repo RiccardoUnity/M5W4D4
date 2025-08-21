@@ -6,7 +6,9 @@ public class Noise : MonoBehaviour
     private NoiseType _type = NoiseType.None;
     public NoiseType GetTypeNoise() => _type;
 
+    private CharacterBrain _brain;
     private PlayerController _playerController;
+    private EnemyHear _myHear;
     private Distraction _distraction;
 
     private const float _maxIntensity_c = 15f;
@@ -30,12 +32,18 @@ public class Noise : MonoBehaviour
         }
         _intensitySqr = _intensity * _intensity;
 
+        _brain = GetComponent<CharacterBrain>();
         _playerController = GetComponentInParent<PlayerController>();
+        _myHear = GetComponent<EnemyHear>();
         _distraction = GetComponent<Distraction>();
         if (_playerController != null)
         {
-            _type = NoiseType.Step;
+            _type = NoiseType.StepPlayer;
             _playerController.onStep += Emission;
+        }
+        else if (_myHear != null)
+        {
+            _type = NoiseType.StepEnemy;
         }
         else if (_distraction != null)
         {
@@ -50,7 +58,7 @@ public class Noise : MonoBehaviour
         for (int i = 0; i < _indexNotAllocate; i++)
         {
             EnemyHear hear = _colliders[i].GetComponent<EnemyHear>();
-            if (hear != null)
+            if (hear != null && hear != _myHear)
             {
                 //Dal punto di vista di ascolta
                 //Più sei vicino al rumore, più questo valore tende a 0
@@ -61,8 +69,15 @@ public class Noise : MonoBehaviour
                 {
                     intensity = Mathf.Clamp01(intensity * 2f);
                 }
-                hear.Listen(position, _type, intensity);
+                hear.Listen(position, _type, intensity, _brain);
             }
         }
+    }
+
+    public void ChatEnemy()
+    {
+        _type = NoiseType.ChatEnemy;
+        Emission();
+        _type = NoiseType.StepEnemy;
     }
 }

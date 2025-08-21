@@ -23,7 +23,7 @@ public class FSM_S_Chat : FSM_BaseState
     private FSM_S_Chat _targetChat;
     private bool _chatMatch;
     public bool IsChatMatch() => _chatMatch;
-    private float _priorityEnemyChat;
+    private float _timeEnemyChat = 2f;
 
     private bool _isWaitingForAnAnswer;
     private bool _isMyRoundToDoQuest;
@@ -72,12 +72,11 @@ public class FSM_S_Chat : FSM_BaseState
         {
             Debug.LogError("Manca la risposta sbagliata sul codice identificativo", gameObject);
         }
-
-        _priorityEnemyChat = Random.value;
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         _brain.SetMyStateChat(_fsmController, this);
         _maxDistanceFromTarget += (_fsmController.GetStateByName(GSM.GetStateAlert()) as FSM_S_Alert).StopFromTarget();
         _maxDistanceFromTargetSqr = _maxDistanceFromTarget * _maxDistanceFromTarget;
@@ -85,23 +84,23 @@ public class FSM_S_Chat : FSM_BaseState
         _transitions = new FSM_Transition[5];
 
         //Transizione: se Player si allontana --> Chase
-        _transitions[0] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
+        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
         _transitions[0].SetCondition(0, HumanEscape, Logic.Equal, true);
 
         //Transizione: se risposta codice negativa --> Chase
-        _transitions[1] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
+        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
         _transitions[1].SetCondition(0, HumanAnswerWrong, Logic.Equal, true);
 
         //Transizione: se risposta codice positiva --> Idle
-        _transitions[2] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[2] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[2].SetCondition(0, HumanAnswerCorrect, Logic.Equal, true);
 
         //Transizione: se target == null --> Idle
-        _transitions[3] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[3] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[3].SetCondition(0, IsTargetNull, Logic.Equal, true);
 
         //Transizione: se UI_ChatEvent occupato --> Idle
-        _transitions[4] = new FSM_Transition(gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[4] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[4].SetCondition(0, HumanHasUI_ChatEvent, Logic.Equal, true);
     }
 
@@ -123,8 +122,20 @@ public class FSM_S_Chat : FSM_BaseState
         }
         else
         {
-            //almeno 2 Enemy sono in State Chat, uno deve iniziare la "conversazione"
-            _brain.StartTimer(_priorityEnemyChat * 2f);
+            //almeno 1 Enemy è in State Chat, il più "veloce" deve iniziare la "conversazione"
+            _targetChat = _target.GetFSMStateChat();
+            //Già in conversazione con qualcun'altro
+            if (_targetChat.IsChatMatch())
+            {
+                _target = null;
+            }
+            //Libero di fare un match
+            else
+            {
+                _noise.ChatEnemy();
+                _brain.StartTimer(_timeEnemyChat);
+            }
+                
         }
     }
 
@@ -196,16 +207,15 @@ public class FSM_S_Chat : FSM_BaseState
             {
                 if (!_chatMatch)
                 {
-                    _targetChat = _target.GetFSMStateChat();
-                    //Già in conversazione con qualcun'altro
-                    if (_targetChat.IsChatMatch())
+                    //Target già impegnato in un match
+                    if(_targetChat.IsChatMatch())
                     {
                         _target = null;
                     }
                     //Libero di fare un match
                     else
                     {
-                        _targetChat.OverrideEnemyTarget(_brain);
+                        _targetChat.OverrideChat(_brain, this);
                         _chatMatch = true;
                         _target.OverrideStopTimer();
                         _isMyRoundToDoQuest = true;
@@ -239,6 +249,14 @@ public class FSM_S_Chat : FSM_BaseState
                             SendAnswer();
                         }
                     }
+                }
+            }
+            //Continuo a chiamarlo, non è detto che mi abbia sentito
+            else
+            {
+                if (!_chatMatch)
+                {
+                    _noise.ChatEnemy();
                 }
             }
         }
@@ -310,13 +328,13 @@ public class FSM_S_Chat : FSM_BaseState
     private bool HumanAnswerWrong() => _answerType == AnswerType.Chase && _questionLevel > 3;
     private bool HumanHasUI_ChatEvent() => _isTargetHuman && !_hasControlOfUI_ChatEvent;
 
-    public void OverrideEnemyTarget(CharacterBrain newTarget)
+    public void OverrideChat(CharacterBrain target, FSM_S_Chat chat)
     {
-        _target = newTarget;
         _chatMatch = true;
-        _targetChat = _target.GetFSMStateChat();
+        _target = target;
+        _targetChat = chat;
     }
-
+    
     public void ReceiveQuestion(CharacterBrain sender, AnswerType answerType)
     {
         if (sender == _target)
@@ -324,7 +342,7 @@ public class FSM_S_Chat : FSM_BaseState
             if (answerType != AnswerType.Return)
             {
                 _answerType = answerType;
-                _brain.StartTimer(_priorityEnemyChat * _maxTimeAnswer);
+                _brain.StartTimer(_timeEnemyChat);
             }
             else
             {

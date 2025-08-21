@@ -16,8 +16,9 @@ public class FSM_S_Take : FSM_BaseState
         _characterBrain = GetComponentInParent<CharacterBrain>();
     }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         _transitions = new FSM_Transition[0];
     }
 
