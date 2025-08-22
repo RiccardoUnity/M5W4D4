@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f87e3d87067d71438b1d836c8c7a007, type: 3}
   m_Name: 0_Level
   m_EditorClassIdentifier: 
-  _answerLevel: 0
   _questions:
-  - _useNumericKeypad: 0
-    _question: Alt! Si fermi!
+  - _question: Alt! Si fermi!
     _answers:
     - Boh
     - Non so

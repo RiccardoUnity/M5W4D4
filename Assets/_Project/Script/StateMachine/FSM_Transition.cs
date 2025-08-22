@@ -109,7 +109,7 @@ public class FSM_Transition
         }
     }
 
-    private GameObject _gameObject;
+    private Enemy_FSM_Controller _fsmController;
     private string _myNameState;
     private FSM_Condition[] _conditions;
     private bool[] _valueConditions;
@@ -118,9 +118,9 @@ public class FSM_Transition
 
     private bool _mainSwitch = true;
 
-    public FSM_Transition(GameObject gameObject, string myNameState, int numberOfConditions, FSM_BaseState nextState)
+    public FSM_Transition(Enemy_FSM_Controller fsmController, string myNameState, int numberOfConditions, FSM_BaseState nextState)
     {
-        _gameObject = gameObject;
+        _fsmController = fsmController;
         _myNameState = myNameState;
         _conditions = new FSM_Condition[numberOfConditions];
         _valueConditions = new bool[numberOfConditions];
@@ -131,7 +131,10 @@ public class FSM_Transition
         else
         {
             _mainSwitch = false;
-            Debug.LogError($"Stato non trovato: {nextState}", _gameObject);
+            if (_fsmController.debug)
+            {
+                Debug.LogError($"Stato non trovato: {nextState}", _fsmController);
+            }
         }
     }
 
@@ -171,12 +174,18 @@ public class FSM_Transition
                 }
                 else
                 {
-                    Debug.LogError($"Condizione già esistente, non sovrascrivibile, {_myNameState}", _gameObject);
+                    if (_fsmController.debug)
+                    {
+                        Debug.LogError($"Condizione già esistente, non sovrascrivibile, {_myNameState}", _fsmController);
+                    }
                 }
             }
             else
             {
-                Debug.LogError($"Condizione non registrata, StackOverFlow, {_myNameState}", _gameObject);
+                if (_fsmController.debug)
+                {
+                    Debug.LogError($"Condizione non registrata, StackOverFlow, {_myNameState}", _fsmController);
+                }
             }
         }
         return false;
@@ -198,7 +207,10 @@ public class FSM_Transition
                     return null;
                 }
             }
-            Debug.Log($"Transizione {_myNameState} --> {_nextState.NameState}, GameObject {_gameObject.name}");
+            if (_fsmController.debug)
+            {
+                Debug.Log($"Transizione {_myNameState} --> {_nextState.NameState}, GameObject {_fsmController.name}", _fsmController);
+            }
             return _nextState;
         }
         return null;

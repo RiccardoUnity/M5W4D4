@@ -20,6 +20,11 @@ public class FSM_S_Take : FSM_BaseState
     {
         base.Start();
         _transitions = new FSM_Transition[0];
+
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Qui non ci sono transizioni, state {NameState}", this);
+        }
     }
 
     public override void StateEnter()

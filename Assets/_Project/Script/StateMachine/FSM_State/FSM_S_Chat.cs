@@ -2,7 +2,8 @@ using GM;
 using UnityEngine;
 using GSM = GM.GameStaticManager;
 
-//Simulazione di una Chat e molto alla buona, forse
+//Simulazione di una Chat, molto alla buona, forse
+//Mentre 2 Enemy chattano, non percepiscono il Player
 public class FSM_S_Chat : FSM_BaseState
 {
     public override string NameState { get => GSM.GetStateChat(); }
@@ -84,30 +85,46 @@ public class FSM_S_Chat : FSM_BaseState
         _transitions = new FSM_Transition[5];
 
         //Transizione: se Player si allontana --> Chase
-        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
+        _transitions[0] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
         _transitions[0].SetCondition(0, HumanEscape, Logic.Equal, true);
 
         //Transizione: se risposta codice negativa --> Chase
-        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
+        _transitions[1] = new FSM_Transition(_fsmController, NameState, 2, _fsmController.GetStateByName(GSM.GetStateChase()));
         _transitions[1].SetCondition(0, HumanAnswerWrong, Logic.Equal, true);
+        _transitions[1].SetCondition(1, _brain.IsInternalTimerNull, Logic.Equal, true);
 
         //Transizione: se risposta codice positiva --> Idle
-        _transitions[2] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[2] = new FSM_Transition(_fsmController, NameState, 2, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[2].SetCondition(0, HumanAnswerCorrect, Logic.Equal, true);
+        _transitions[2].SetCondition(1, _brain.IsInternalTimerNull, Logic.Equal, true);
 
         //Transizione: se target == null --> Idle
-        _transitions[3] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[3] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[3].SetCondition(0, IsTargetNull, Logic.Equal, true);
 
         //Transizione: se UI_ChatEvent occupato --> Idle
-        _transitions[4] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[4] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[4].SetCondition(0, HumanHasUI_ChatEvent, Logic.Equal, true);
+
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Transizioni create, state {NameState}", this);
+        }
     }
 
     public override void StateEnter()
     {
         base.StateEnter();
         _target = _fsmController.GetSenseBrain().GetTarget();
+        //Questa cosa non è il massimo, ma solo per consegnare in tempo
+        //Sicuramente è un altro enemy
+        if (_target == null)
+        {
+            RaycastHit hit;
+            Physics.Linecast(transform.position + new Vector3(0f, 1f, 0f), _fsmController.GetSenseBrain().GetTargetV3(), out hit, (1 << 6), QueryTriggerInteraction.Ignore);
+            _target = hit.collider.GetComponent<CharacterBrain>();
+            Debug.LogWarning("Override Target nello state Chat", gameObject);
+        }
         _targetChat = null;
         _isTargetHuman = _target.GetComponent<PlayerManager>() != null;
         _chatMatch = false;
@@ -119,6 +136,10 @@ public class FSM_S_Chat : FSM_BaseState
         if (_isTargetHuman)
         {
             _hasControlOfUI_ChatEvent = _UI_ChatEvent.Enter(gameObject, GetAnswer, _maxTimeAnswer);
+            if (_fsmController.debug)
+            {
+                Debug.Log($"Chat con il Player, {NameState}", this);
+            }
         }
         else
         {
@@ -128,12 +149,20 @@ public class FSM_S_Chat : FSM_BaseState
             if (_targetChat.IsChatMatch())
             {
                 _target = null;
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Target già impegnato in una conversazione, {NameState}", this);
+                }
             }
             //Libero di fare un match
             else
             {
                 _noise.ChatEnemy();
                 _brain.StartTimer(_timeEnemyChat);
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Chat con un altro Enemy, lo chiamo a 'voce', {NameState}", this);
+                }
             }
                 
         }
@@ -148,6 +177,10 @@ public class FSM_S_Chat : FSM_BaseState
             if (HumanEscape())
             {
                 _brain.AddCharacter(this, _target);
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Il Player è scappato, lo aggiungo alla lista delle mie conoscenze, {NameState}", this);
+                }
             }
             else
             {
@@ -159,6 +192,10 @@ public class FSM_S_Chat : FSM_BaseState
                         _questionLevel = 4;
                         _answerType = AnswerType.Chase;
                         _brain.AddCharacter(this, _target);
+                        if (_fsmController.debug)
+                        {
+                            Debug.Log($"Ho scoperto che sto conversando con il Player, lo aggiungo alla lista delle mie conoscenze, {NameState}", this);
+                        }
                     }
                 }
                 else
@@ -188,6 +225,10 @@ public class FSM_S_Chat : FSM_BaseState
                         _isWaitingForAnAnswer = true;
                         _isMyRoundToDoQuest = false;
                         _brain.StartTimer(_maxTimeAnswer);
+                        if (_fsmController.debug)
+                        {
+                            Debug.Log($"Pongo la domanda {_questionLevel}, {NameState}", this);
+                        }
                     }
                     else
                     {
@@ -211,6 +252,10 @@ public class FSM_S_Chat : FSM_BaseState
                     if(_targetChat.IsChatMatch())
                     {
                         _target = null;
+                        if (_fsmController.debug)
+                        {
+                            Debug.Log($"Il target si è messo a parlare con un altro, {NameState}", this);
+                        }
                     }
                     //Libero di fare un match
                     else
@@ -219,6 +264,10 @@ public class FSM_S_Chat : FSM_BaseState
                         _chatMatch = true;
                         _target.OverrideStopTimer();
                         _isMyRoundToDoQuest = true;
+                        if (_fsmController.debug)
+                        {
+                            Debug.Log($"Posso parlare con un Enemy, inizio io con le domande, {NameState}", this);
+                        }
                     }
                 }
                 else
@@ -333,6 +382,10 @@ public class FSM_S_Chat : FSM_BaseState
         _chatMatch = true;
         _target = target;
         _targetChat = chat;
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Io rispondo alle domande di {_target.gameObject.name}, {NameState}", this);
+        }
     }
     
     public void ReceiveQuestion(CharacterBrain sender, AnswerType answerType)
@@ -343,10 +396,18 @@ public class FSM_S_Chat : FSM_BaseState
             {
                 _answerType = answerType;
                 _brain.StartTimer(_timeEnemyChat);
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"'Elaboro' la risposta, {NameState}", this);
+                }
             }
             else
             {
                 _target = null;
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Fine conversazione, {NameState}", this);
+                }
             }
         }
     }
@@ -356,9 +417,17 @@ public class FSM_S_Chat : FSM_BaseState
         switch (_answerType)
         {
             case AnswerType.ID:
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Comunico il mio ID, {NameState}", this);
+                }
                 _targetChat.ReceiveAnswer(_answerType, _brain.GetID());
                 break;
             case AnswerType.Player:
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Comunico se ho visto il Player, {NameState}", this);
+                }
                 _targetChat.ReceiveAnswer(_answerType, _brain.FindPlayerInMetCharacter());
                 break;
         }
@@ -377,6 +446,10 @@ public class FSM_S_Chat : FSM_BaseState
                 break;
         }
         _isMyRoundToDoQuest = false;
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Aggiungo un nuovo amico alla lista, {NameState}", this);
+        }
     }
 
     public void ReceiveAnswer(AnswerType answerType, CharacterBrain character)
@@ -384,7 +457,20 @@ public class FSM_S_Chat : FSM_BaseState
         switch (answerType)
         {
             case AnswerType.Player:
-                _brain.AddCharacter(this, character);
+                if (_brain.AddCharacter(this, character))
+                {
+                    if (_fsmController.debug)
+                    {
+                        Debug.Log($"Ora conosco il Player anch'io senza averlo mai incontrato, {NameState}", this);
+                    }
+                }
+                else
+                {
+                    if (_fsmController.debug)
+                    {
+                        Debug.Log($"Non ha visto il Player, {NameState}", this);
+                    }
+                }
                 _isWaitingForAnAnswer = false;
                 ++_questionLevel;
                 break;

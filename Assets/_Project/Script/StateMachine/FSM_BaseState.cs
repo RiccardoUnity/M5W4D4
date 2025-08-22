@@ -1,9 +1,10 @@
 using GM;
 using System;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using GSM = GM.GameStaticManager;
 
-[System.Serializable]
+[Serializable]
 public abstract class FSM_BaseState : MonoBehaviour
 {
     protected Enemy_FSM_Controller _fsmController;
@@ -40,12 +41,12 @@ public abstract class FSM_BaseState : MonoBehaviour
         _anyState = new FSM_Transition[2];
 
         //Transizione: ho sentito un altro Enemy --> Chat
-        _anyState[0] = new FSM_Transition(transform.parent.gameObject, NameState, 2, _fsmController.GetStateByName(GSM.GetStateChat()));
+        _anyState[0] = new FSM_Transition(_fsmController, NameState, 2, _fsmController.GetStateByName(GSM.GetStateChat()));
         _anyState[0].SetCondition(0, IsChatState, Logic.Equal, false);
         _anyState[0].SetCondition(1, HeardOtherEnemy, Logic.Equal, true);
 
         //Transizione: se qualcuno mi chiama --> AnswerCallHelp
-        _anyState[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAnswerCallHelp()));
+        _anyState[1] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAnswerCallHelp()));
         _anyState[1].SetCondition(0, IsSomeoneCallMe, Logic.Equal, true);
     }
 

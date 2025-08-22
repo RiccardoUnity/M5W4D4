@@ -32,20 +32,25 @@ public class FSM_S_Alert : FSM_BaseState
         _transitions = new FSM_Transition[4];
 
         //Transizione: Ho percepito il Player --> Chase
-        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
+        _transitions[0] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChase()));
         _transitions[0].SetCondition(0, GetIsTargetPlayer, Logic.Equal, true);
 
         //Transizione: Ha raggiunto il target --> Chat
-        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChat()));
+        _transitions[1] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateChat()));
         _transitions[1].SetCondition(0, TryToChat, Logic.Equal, true);
 
         //Transizione: Ha raggiunto la posizione del target --> Search
-        _transitions[2] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateSearch()));
+        _transitions[2] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateSearch()));
         _transitions[2].SetCondition(0, TryToSearch, Logic.Equal, true);
 
         //Transizione: Non ho un percorso valido per indagare --> CallHelp
-        _transitions[3] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateCallHelp()));
+        _transitions[3] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateCallHelp()));
         _transitions[3].SetCondition(0, GetPathValid, Logic.Equal, false);
+
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Transizioni create, state {NameState}", this);
+        }
     }
 
     public override void StateEnter()
@@ -75,6 +80,10 @@ public class FSM_S_Alert : FSM_BaseState
         if (_agent.remainingDistance <= _agent.stoppingDistance)
         {
             _targetInRange = true;
+            if (_fsmController.debug)
+            {
+                Debug.Log($"Giunto a destinazione, {NameState}", this);
+            }
         }
         else
         {
@@ -93,10 +102,17 @@ public class FSM_S_Alert : FSM_BaseState
         if (_path.status == NavMeshPathStatus.PathComplete)
         {
             _agent.path = _path;
+            if (_fsmController.debug)
+            {
+                Debug.Log($"Qualcosa ha attirato la mia attenzione, {NameState}", this);
+            }
         }
         else
         {
-            Debug.Log("Path " + _path.status + " " + _fsmController.GetSenseBrain().GetTargetV3());
+            if (_fsmController.debug)
+            {
+                Debug.Log($"Path {_path.status}, posizione {_fsmController.GetSenseBrain().GetTargetV3()}, {NameState} ", this);
+            }
         }
     }
 

@@ -26,8 +26,13 @@ public class FSM_S_CallHelp : FSM_BaseState
         _transitions = new FSM_Transition[1];
 
         //Transizione: chiamate terminate --> Idle
-        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[0] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[0].SetCondition(0, GetCloseCall, Logic.Equal, true);
+
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Transizioni create, state {NameState}", this);
+        }
     }
 
     public override void StateEnter()
@@ -47,6 +52,10 @@ public class FSM_S_CallHelp : FSM_BaseState
             if (_answerCallHelp != null)
             {
                 _closeCall = _answerCallHelp.SetDestination(this, _fsmController.GetSenseBrain().GetTargetV3());
+                if (_fsmController.debug)
+                {
+                    Debug.Log($"Qualcuno ha risposto, inizio conversazione, {NameState}", this);
+                }
             }
             //Devo chiamare
             else
@@ -57,12 +66,20 @@ public class FSM_S_CallHelp : FSM_BaseState
                 if (_characterCalled == null)
                 {
                     _closeCall = true;
+                    if (_fsmController.debug)
+                    {
+                        Debug.Log($"Nessun'altro da chiamare, {NameState}", this);
+                    }
                 }
                 //Provo a sentirlo
                 else
                 {
                     _characterCalled.fsmCallHelp = this;
                     _brain.StartTimer(_brain.GetTimer());
+                    if (_fsmController.debug)
+                    {
+                        Debug.Log($"Chiamo chi conosco, {NameState}", this);
+                    }
                 }
             }
         }

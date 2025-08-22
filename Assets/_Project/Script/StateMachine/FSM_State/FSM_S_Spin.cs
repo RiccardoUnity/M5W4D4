@@ -39,16 +39,21 @@ public class FSM_S_Spin : FSM_BaseState
         _transitions = new FSM_Transition[2];
 
         //Transizione: Individuato Player --> Alert
-        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[0] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
         _transitions[0].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Player);
 
         //Transizione: Individuato Unknown --> Alert
-        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
+        _transitions[1] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateAlert()));
         _transitions[1].SetCondition(0, _fsmController.GetDetected, Logic.Equal, Detected.Unknown);
 
         //Transizione: Fine del movimento --> Idle
-        _transitions[1] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[1] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
         _transitions[1].SetCondition(0, IsRotationCompleted, Logic.Equal, true);
+
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Transizioni create, state {NameState}", this);
+        }
     }
 
     public override void StateEnter()
@@ -94,7 +99,10 @@ public class FSM_S_Spin : FSM_BaseState
                 _fsmController.transform.rotation = Quaternion.Euler(0f, _currentAngle, 0f);
             }
         }
-        Debug.Log("Sei uscito dalla Coroutine delle rotazioni della macchina a stati", gameObject);
+        if (_fsmController.debug)
+        {
+            Debug.Log($"Sei uscito dalla Coroutine di {NameState}", this);
+        }
         _rotationUpdate = null;
     }
 

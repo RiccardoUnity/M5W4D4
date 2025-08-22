@@ -85,12 +85,14 @@ public class CharacterBrain : MonoBehaviour
         _internalTimer = null;
     }
 
-    public void AddCharacter(FSM_S_Chat fsmStateChat, CharacterBrain character)
+    public bool AddCharacter(FSM_S_Chat fsmStateChat, CharacterBrain character)
     {
-        if (fsmStateChat == _fsmChat && character != null)
+        if (fsmStateChat == _fsmChat && character != null && character != FindPlayerInMetCharacter())
         {
             _metCharacters.Add(character);
+            return true;
         }
+        return false;
     }
 
     public bool IsAlreadyMet(CharacterBrain character)

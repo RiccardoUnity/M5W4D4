@@ -3137,8 +3137,6 @@ MonoBehaviour:
   - {fileID: 408098386}
   - {fileID: 612309257}
   - {fileID: 354105729}
-  _startIndex: 0
-  _inverse: 0
 --- !u!1 &453830896
 GameObject:
   m_ObjectHideFlags: 0
@@ -5395,6 +5393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f8191b452fe3468e6d5d81e42807b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
   _speedAlert: 1
   _perceptionMultiplier: 2
 --- !u!114 &866984578
@@ -5431,7 +5430,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 2
 --- !u!136 &866984580
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5573,6 +5572,8 @@ MonoBehaviour:
   _startWithThisState: 1
   _path: {fileID: 453054082}
   _pointType: 0
+  _startIndex: 0
+  _inverse: 0
 --- !u!114 &896601096
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5586,7 +5587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startWithThisState: 0
-  _waiting: 5
+  _waiting: 1
   _isRandomWaiting: 1
   _maxWaiting: 5
 --- !u!114 &896601097
@@ -6953,7 +6954,7 @@ NavMeshAgent:
   m_Radius: 0.5
   m_Speed: 9
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 5
   m_AngularSpeed: 1200
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
@@ -6962,7 +6963,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!136 &1568113241
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7870,6 +7871,8 @@ MonoBehaviour:
   _startWithThisState: 1
   _path: {fileID: 453054082}
   _pointType: 0
+  _startIndex: 0
+  _inverse: 0
 --- !u!114 &1782088250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7901,7 +7904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startWithThisState: 0
-  _waiting: 5
+  _waiting: 1
   _isRandomWaiting: 1
   _maxWaiting: 5
 --- !u!114 &1782088252
@@ -7962,7 +7965,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 2
 --- !u!136 &1796793379
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8016,6 +8019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f8191b452fe3468e6d5d81e42807b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
   _speedAlert: 1
   _perceptionMultiplier: 2
 --- !u!114 &1796793382

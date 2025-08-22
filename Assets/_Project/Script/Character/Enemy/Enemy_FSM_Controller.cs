@@ -7,6 +7,7 @@ using GM;
 [RequireComponent(typeof(EnemyView))]
 public class Enemy_FSM_Controller : MonoBehaviour
 {
+    public bool debug;
     private bool _mainSwitch = true;
 
     private EnemySenseBrain _brainSense;
@@ -56,6 +57,10 @@ public class Enemy_FSM_Controller : MonoBehaviour
                 if (state.GetStartWithThisState() && state.enabled)
                 {
                     _nextState = state;
+                    if (debug)
+                    {
+                        Debug.Log($"Lo stato iniziale è {_nextState.NameState}", gameObject);
+                    }
                 }
             }
             if (_nextState == null)
@@ -76,7 +81,10 @@ public class Enemy_FSM_Controller : MonoBehaviour
                 return state;
             }
         }
-        Debug.LogError($"Lo stato {name} non è stato trovato", gameObject);
+        if (debug)
+        {
+            Debug.LogError($"Lo stato {name} non è stato trovato", gameObject);
+        }
         return null;
     }
 
@@ -111,14 +119,20 @@ public class Enemy_FSM_Controller : MonoBehaviour
                 //Uscita dallo stato attuale
                 if (_currentState != null)
                 {
-                    Debug.Log($"FSM StateExit {_currentState.NameState}, name {gameObject.name}");
+                    if (debug)
+                    {
+                        Debug.Log($"FSM StateExit {_currentState.NameState}, name {gameObject.name}", gameObject);
+                    }
                     _currentState.StateExit();
                 }
                 //Cambio stato attuale
                 _currentState = _nextState;
                 _nextState = null;
                 //Entro nel nuovo stato attuale
-                Debug.Log($"FSM StateEnter {_currentState.NameState}, name {gameObject.name}");
+                if (debug)
+                {
+                    Debug.Log($"FSM StateEnter {_currentState.NameState}, name {gameObject.name}", gameObject);
+                }
                 _currentState.StateEnter();
             }
 
@@ -147,7 +161,6 @@ public class Enemy_FSM_Controller : MonoBehaviour
                 }
             }
             while (_internalTime < _perception);
-            _internalTime += Time.deltaTime;
 
             //Aggiorno lo stato
             _currentState.StateUpdate(_internalTime);
