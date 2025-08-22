@@ -20,6 +20,7 @@ public class Interactable : MonoBehaviour
     private float _fillScale;
     [Range(0.05f, 1f)]
     [SerializeField] private float _timeFillScale = 0.1f;
+    [SerializeField] private bool _isModifierNavMeshSurface;
 
     [Header("Physics")]
     private Vector3 _offset = new Vector3(0f, 1f, 0f);
@@ -69,6 +70,14 @@ public class Interactable : MonoBehaviour
             _startScaleCanvas = _canvas.localScale;
             _canvas.localScale = Vector3.zero;
             _canvas.gameObject.SetActive(false);
+
+            if (_isModifierNavMeshSurface)
+            {
+                NavMeshSurfaceManager nav = InteractableSceneManager.Instance.GetNavMeshSurface();
+                _customButton.onClickComplete.AddListener(nav.ReBuildNavMesh);
+                _customButton.onClickComplete.AddListener(SwichOff);
+                
+            }
         }
     }
 
@@ -157,6 +166,11 @@ public class Interactable : MonoBehaviour
     {
         _isInAnimation = false;
         _scaleCanvas = null;
+    }
+
+    public void SwichOff()
+    {
+
     }
 
     void OnDrawGizmos()

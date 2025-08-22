@@ -193,7 +193,7 @@ public class UI_CustomButton : MonoBehaviour, IPointerEnterHandler, IPointerExit
                     }
                     break;
                 case Status.Execute:
-                    Debug.Log($"Eseguo {gameObject.name}");
+                    Debug.Log($"Eseguo {gameObject.name}", gameObject);
                     _isInAnimation = false;
                     SetUp();
                     onClickComplete.Invoke();

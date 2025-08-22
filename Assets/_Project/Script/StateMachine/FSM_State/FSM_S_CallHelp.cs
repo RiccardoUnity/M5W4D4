@@ -1,3 +1,4 @@
+using GM;
 using UnityEngine;
 using GSM = GM.GameStaticManager;
 
@@ -9,6 +10,8 @@ public class FSM_S_CallHelp : FSM_BaseState
     private CharacterBrain _characterCalled;
     private int _count;
     private FSM_S_AnswerCallHelp _answerCallHelp;
+    private bool _closeCall;
+    private bool GetCloseCall() => _closeCall;
 
     protected override void Awake()
     {
@@ -22,7 +25,9 @@ public class FSM_S_CallHelp : FSM_BaseState
         base.Start();
         _transitions = new FSM_Transition[1];
 
-        //Transizione:
+        //Transizione: chiamate terminate --> Idle
+        _transitions[0] = new FSM_Transition(transform.parent.gameObject, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
+        _transitions[0].SetCondition(0, GetCloseCall, Logic.Equal, true);
     }
 
     public override void StateEnter()
@@ -30,6 +35,7 @@ public class FSM_S_CallHelp : FSM_BaseState
         base.StateEnter();
         _count = 0;
         _answerCallHelp = null;
+        _closeCall = false;
     }
 
     public override void StateUpdate(float time)
@@ -40,17 +46,19 @@ public class FSM_S_CallHelp : FSM_BaseState
             //Qualcuno ha risposto
             if (_answerCallHelp != null)
             {
-                
+                _closeCall = _answerCallHelp.SetDestination(this, _fsmController.GetSenseBrain().GetTargetV3());
             }
             //Devo chiamare
             else
             {
                 _characterCalled = _brain.GetEnemyKnow(_count);
                 ++_count;
+                //Non conosco nessun'altro, lascio stare
                 if (_characterCalled == null)
                 {
-
+                    _closeCall = true;
                 }
+                //Provo a sentirlo
                 else
                 {
                     _characterCalled.fsmCallHelp = this;

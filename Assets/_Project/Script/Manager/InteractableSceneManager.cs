@@ -91,4 +91,16 @@ public class InteractableSceneManager : MonoBehaviour
         }
     }
     #endregion
+
+    private NavMeshSurfaceManager _navMeshSurface;
+    public NavMeshSurfaceManager GetNavMeshSurface() => _navMeshSurface;
+    public bool SetNavMeshSurface(NavMeshSurfaceManager navMeshSurface)
+    {
+        if (_navMeshSurface == null)
+        {
+            _navMeshSurface = navMeshSurface;
+            return true;
+        }
+        return false;
+    }
 }

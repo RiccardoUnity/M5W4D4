@@ -2588,6 +2588,7 @@ GameObject:
   - component: {fileID: 427721204}
   - component: {fileID: 427721203}
   - component: {fileID: 427721205}
+  - component: {fileID: 427721206}
   m_Layer: 0
   m_Name: M_NavMeshSurface
   m_TagString: Untagged
@@ -2672,6 +2673,18 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 93ee2d854f3fd5b43afc2e1e6b894c78, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &427721206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 427721202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180d35193c0d26445a7596ddb62f2b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &432861027
 GameObject:
   m_ObjectHideFlags: 0
@@ -5474,6 +5487,7 @@ GameObject:
   - component: {fileID: 896601095}
   - component: {fileID: 896601094}
   - component: {fileID: 896601101}
+  - component: {fileID: 896601102}
   - component: {fileID: 896601099}
   - component: {fileID: 896601092}
   - component: {fileID: 896601091}
@@ -5640,6 +5654,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ccbe10fba9d6734f9618b919f9c15a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startWithThisState: 0
+--- !u!114 &896601102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896601089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e2156b3b7de674b88d42997e73d183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _startWithThisState: 0
@@ -6408,7 +6435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1274788958
 Transform:
   m_ObjectHideFlags: 0
@@ -6441,6 +6468,7 @@ MonoBehaviour:
   _canvas: {fileID: 507537820}
   _customButton: {fileID: 1758948425}
   _timeFillScale: 0.5
+  _isModifierNavMeshSurface: 1
   _maxDistanceRay: 2
   _viewGizmos: 1
 --- !u!1 &1287883993
@@ -7706,6 +7734,7 @@ GameObject:
   - component: {fileID: 1782088249}
   - component: {fileID: 1782088248}
   - component: {fileID: 1782088247}
+  - component: {fileID: 1782088252}
   - component: {fileID: 1782088246}
   - component: {fileID: 1782088245}
   - component: {fileID: 1782088244}
@@ -7875,6 +7904,19 @@ MonoBehaviour:
   _waiting: 5
   _isRandomWaiting: 1
   _maxWaiting: 5
+--- !u!114 &1782088252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782088241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e2156b3b7de674b88d42997e73d183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startWithThisState: 0
 --- !u!1 &1796793374
 GameObject:
   m_ObjectHideFlags: 0
