@@ -16,7 +16,23 @@ MonoBehaviour:
   - _question: "Lo sa che questa \xE8 una zona riservata?"
     _answers:
     - Ovviamente ... no
-    - "Perch\xE8?"
+    - "Questo \xE8 uno spazio pubblico e io faccio quello che mi pare"
     - Riservata a me
     - Si ... si certo
     _afterAnswer: Non mi faccia perdere tempo in questo modo
+  - _question: Cosa ci fa in giro a quest'ora?
+    _answers:
+    - Facevo una passeggiata
+    - Prendevo una boccata d'aria fresca
+    - "L'amico del fratello della suocera di mia cugina \xE8 ammalato e stavo andando
+      a trovarlo"
+    - Ehm ... ma scusi, lei non lo sa? Ma non si vergogna?
+    _afterAnswer: "Questa \xE8 una situazione serie e lei si deve atteggiare di conseguenza"
+  - _question: "Sentiamo, che scusa ha per andarsene a zonzo cos\xEC?"
+    _answers:
+    - "C'\xE8 un bel Sole oggi, vero?"
+    - "Lo sente anche lei? La stanno chiamando l\xE0 gi\xF9 in fondo"
+    - "E lei allora? Anche lei \xE8 in giro"
+    - "Quando sono passato di qui l'ultima volta mi \xE8 caduto il portafoglio, lei
+      lo ha visto?"
+    _afterAnswer: Sempre e solo divagazioni inutili

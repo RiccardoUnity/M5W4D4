@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
+using GSM = GM.GameStaticManager;
 
 //Senso attivo
 [RequireComponent(typeof(EnemySenseBrain))]
 public class EnemyView : MonoBehaviour
 {
-    [SerializeField] private bool _useGizmos;
     private EnemySenseBrain _brain;
     [SerializeField] private bool _useRandom;
 
@@ -36,6 +37,12 @@ public class EnemyView : MonoBehaviour
     private QueryTriggerInteraction _qti = QueryTriggerInteraction.Ignore;
 
     private List<CharacterBrain> _meet = new List<CharacterBrain>();
+
+    [Header("Gizmos")]
+    [SerializeField] private bool _useGizmos;
+    private Color _orange = new Color(1f, 0.4f, 0f, 1f);
+    private Vector3[] _pointsCone = new Vector3[6];
+    [SerializeField] private float _angleDeltaY;
 
     void Awake()
     {
@@ -113,12 +120,30 @@ public class EnemyView : MonoBehaviour
         return null;
     }
 
+    //I punti devono essere calcolati ad ogni frame perchè può variare l'angolo e la distanza
     void OnDrawGizmos()
     {
         if (_useGizmos)
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, _distance);
+            float angleStart = (_angleView / -2f) * GSM._myPI;
+            float angleRad = (_angleView / _pointsCone.Length) * GSM._myPI;
+            float x;
+            float z;
+            Quaternion rotation = transform.rotation * Quaternion.Euler(0f, _angleDeltaY, 0f);
+            for (int i = 0; i < _pointsCone.Length; i++)
+            {
+                x = Mathf.Cos(angleStart + angleRad * i) * _distance;
+                z = Mathf.Sin(angleStart + angleRad * i) * _distance;
+                _pointsCone[i] = transform.position + rotation * new Vector3(x, 1f, z);
+            }
+
+            Gizmos.color = _orange;
+            for (int i = 0; i < _pointsCone.Length - 1; i++)
+            {
+                Gizmos.DrawLine(_pointsCone[i], _pointsCone[i + 1]);
+            }
+            Gizmos.DrawLine(transform.position + Vector3.up, _pointsCone[0]);
+            Gizmos.DrawLine(transform.position + Vector3.up, _pointsCone[_pointsCone.Length - 1]);
         }
     }
 }

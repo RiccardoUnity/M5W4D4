@@ -13,7 +13,21 @@ MonoBehaviour:
   m_Name: 3_LevelCode
   m_EditorClassIdentifier: 
   _questions:
-  - _question: Ok, ne ho avuto abbastanza, mi dica il codice
+  - _question: Per lasciarti andare, devi prima darmi un codice valido
+    _answers:
+    - 
+    - 
+    - 
+    - 
+    _afterAnswer: 
+  - _question: Nonostante tutto, se sai il codice ti posso anche lasciare andare
+    _answers:
+    - 
+    - 
+    - 
+    - 
+    _afterAnswer: 
+  - _question: Che nottata, spero finisca presto. Ora il codice per favore
     _answers:
     - 
     - 

@@ -15,8 +15,24 @@ MonoBehaviour:
   _questions:
   - _question: "Se continua in questo modo sar\xF2 costretto a procedere, lo sa?"
     _answers:
-    - Lo spero proprio
+    - "Oh no, e cosa mi far\xE0?"
     - Non vedo l'ora
     - Ma no, cosa dice, andiamo su
-    - E qui cosa gli dico io ...
-    _afterAnswer: "Non \xE8 proprio possibile, ma vediamo se adesso ridi ancora"
+    - Beh, lo vado a dire alla mamma
+    _afterAnswer: "Non \xE8 proprio possibile comportarsi cos\xEC di fronte a me,
+      ma vediamo se adesso ridi ancora"
+  - _question: Mi stai proprio facendo arrabbiare lo sai?
+    _answers:
+    - No, non lo so
+    - Cosa? Sono un tipo sensibile io
+    - Guarda che ti vengono le rughe
+    - Ti si alza la pressione, non ti fa bene
+    _afterAnswer: ("Tutte le frasi di questo dialogo sono AI Free - le ho inventate
+      tutte io")
+  - _question: Ne ho abbastanza, ti sbatto in prigione
+    _answers:
+    - Non puoi, non ne hai il diritto
+    - "Ci sono gi\xE0 stato"
+    - "Ho degli amici l\xE0 dentro, se mi ci porti te li faccio conoscere"
+    - Tanto ho "uscite gratis di prigione" proprio qua in tasca
+    _afterAnswer: Adesso ti tolgo io quel sorrisetto che ti ritrovi

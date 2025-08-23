@@ -75,7 +75,9 @@ namespace GM
         public static string GetStateSearch() => "Search";
         public static string GetStateTake() => "Take";
 
-        public const int _numberAnswers = 4; 
+        public const int _numberAnswers = 4;
+
+        public const float _myPI = 3.14f / 180f;
     }
 }
 

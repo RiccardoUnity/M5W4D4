@@ -15,8 +15,22 @@ MonoBehaviour:
   _questions:
   - _question: Alt! Si fermi!
     _answers:
-    - Boh
-    - Non so
-    - Qualcosa
+    - Ma chi? Io?
+    - Non ho fatto niente, glielo assicuro
+    - Ma sta parlando con me?
     - Divertente
     _afterAnswer: "\xC8 questo il modo di rivolgersi!?"
+  - _question: Ehi lei, venga qua
+    _answers:
+    - Si subito
+    - Ehm ... devo proprio?
+    - Ma anche no sa
+    - Non mi fido di lei
+    _afterAnswer: Devo fare dei controlli
+  - _question: Oh, finalmente l'ho raggiunta
+    _answers:
+    - "Perch\xE8?"
+    - Non capisco la situazione
+    - Ho forse fatto qualcosa?
+    - "Ma, sono appena arrivato e gi\xE0 mi fermate"
+    _afterAnswer: Adesso le spiego

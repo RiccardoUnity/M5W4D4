@@ -20,7 +20,6 @@ public class Interactable : MonoBehaviour
     private float _fillScale;
     [Range(0.05f, 1f)]
     [SerializeField] private float _timeFillScale = 0.1f;
-    [SerializeField] private bool _isModifierNavMeshSurface;
 
     [Header("Physics")]
     private Vector3 _offset = new Vector3(0f, 1f, 0f);
@@ -71,12 +70,16 @@ public class Interactable : MonoBehaviour
             _canvas.localScale = Vector3.zero;
             _canvas.gameObject.SetActive(false);
 
-            if (_isModifierNavMeshSurface)
+            //Per buildare la navMesh
+            int index = _customButton.onClickComplete.GetPersistentEventCount();
+            for (int i = 0; i < index; i++)
             {
-                NavMeshSurfaceManager nav = InteractableSceneManager.Instance.GetNavMeshSurface();
-                _customButton.onClickComplete.AddListener(nav.ReBuildNavMesh);
-                _customButton.onClickComplete.AddListener(SwichOff);
-                
+                if (_customButton.onClickComplete.GetPersistentTarget(i) is Door target)
+                {
+                    target.onAnimationComplete += InteractableSceneManager.Instance.GetNavMeshSurface().ReBuildNavMesh;
+                    Debug.Log("Assegnato");
+                }
+                break;
             }
         }
     }
@@ -170,7 +173,7 @@ public class Interactable : MonoBehaviour
 
     public void SwichOff()
     {
-
+        
     }
 
     void OnDrawGizmos()
