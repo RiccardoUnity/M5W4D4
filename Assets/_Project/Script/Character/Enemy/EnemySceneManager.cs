@@ -102,13 +102,40 @@ public class EnemySceneManager : MonoBehaviour
             {
                 if (fsmController.IsCurrentStateTake())
                 {
-                    _generalSwich = false;
-                    foreach (CharacterBrain character in _enemies.Values)
-                    {
-                        character.GetComponent<Enemy_FSM_Controller>().MainSwitchOff();
-                    }
+                    EndGame();
+                    return true;
                 }
             }
+        }
+        return false;
+    }
+
+    private void EndGame()
+    {
+        _generalSwich = false;
+        foreach (CharacterBrain character in _enemies.Values)
+        {
+            character.GetComponent<Enemy_FSM_Controller>().MainSwitchOff();
+        }
+    }
+
+    private UI_CanvasOverlay _canvas;
+    public bool SetCanvas(UI_CanvasOverlay canvas)
+    {
+        if (_canvas == null)
+        {
+            _canvas = canvas;
+            return true;
+        }
+        return false;
+    }
+
+    public bool Victory(UI_CanvasOverlay canvas)
+    {
+        if (_canvas == canvas)
+        {
+            EndGame();
+            return true;
         }
         return false;
     }

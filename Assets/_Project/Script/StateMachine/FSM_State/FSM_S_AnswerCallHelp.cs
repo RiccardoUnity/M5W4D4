@@ -12,9 +12,9 @@ public class FSM_S_AnswerCallHelp : FSM_BaseState
     private FSM_S_CallHelp _callHelp;
     private NavMeshAgent _agent;
     private NavMeshPath _path;
-    private bool GetPathStatus() => _path.status == NavMeshPathStatus.PathComplete;
-    private bool _targetInRange;
-    private bool GetTargetInRange() => _targetInRange;
+    private bool IsPathStatusComplete() => _path.status == NavMeshPathStatus.PathComplete;
+    private bool _isTargetInRange;
+    private bool GetIsTargetInRange() => _isTargetInRange;
     private float _stoppingDistancePoint = 0.1f;
 
     protected override void Awake()
@@ -33,11 +33,11 @@ public class FSM_S_AnswerCallHelp : FSM_BaseState
 
         //Transizione: se sono arrivato alla posizione --> Search
         _transitions[0] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateSearch()));
-        _transitions[0].SetCondition(0, GetTargetInRange, Logic.Equal, true);
+        _transitions[0].SetCondition(0, GetIsTargetInRange, Logic.Equal, true);
 
         //Transizione: se non posso andare --> Idle
         _transitions[1] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
-        _transitions[1].SetCondition(0, GetPathStatus, Logic.Equal, false);
+        _transitions[1].SetCondition(0, IsPathStatusComplete, Logic.Equal, false);
 
         if (_fsmController.debug)
         {
@@ -51,7 +51,7 @@ public class FSM_S_AnswerCallHelp : FSM_BaseState
         _callHelp = _brain.fsmCallHelp;
         _brain.fsmCallHelp = null;  //Altrimenti attiva un'altra volta la transizione in _anyState
         _callHelp.AnswerToCall(this);
-        _targetInRange = false;
+        _isTargetInRange = false;
         if (_fsmController.debug)
         {
             Debug.Log($"Rispondo alla chiamata, inizio conversazione, {NameState}", this);
@@ -64,7 +64,7 @@ public class FSM_S_AnswerCallHelp : FSM_BaseState
 
         if (_agent.remainingDistance <= _agent.stoppingDistance)
         {
-            _targetInRange = true;
+            _isTargetInRange = true;
             if (_fsmController.debug)
             {
                 Debug.Log($"Giunto a destinazione, {NameState}", this);
@@ -72,7 +72,7 @@ public class FSM_S_AnswerCallHelp : FSM_BaseState
         }
         else
         {
-            _targetInRange = false;
+            _isTargetInRange = false;
         }
     }
 

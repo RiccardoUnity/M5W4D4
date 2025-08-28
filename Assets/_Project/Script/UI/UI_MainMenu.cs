@@ -4,9 +4,14 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 #endif
 
-public class MainMenu : MonoBehaviour
+public class UI_MainMenu : MonoBehaviour
 {
     public void NewGame()
+    {
+        SceneFade.Instance.StartFade(LoadNewGame);
+    }
+
+    private void LoadNewGame()
     {
         SceneManager.LoadScene(1);
     }

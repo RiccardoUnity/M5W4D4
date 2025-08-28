@@ -66,6 +66,8 @@ public class Interactable : MonoBehaviour
         {
             _player = InteractableSceneManager.Instance.GetPlayer().transform;
 
+            _canvas.rotation = Quaternion.Euler(0f, Camera.main.transform.eulerAngles.y, 0f);
+
             _startScaleCanvas = _canvas.localScale;
             _canvas.localScale = Vector3.zero;
             _canvas.gameObject.SetActive(false);
@@ -77,7 +79,6 @@ public class Interactable : MonoBehaviour
                 if (_customButton.onClickComplete.GetPersistentTarget(i) is Door target)
                 {
                     target.onAnimationComplete += InteractableSceneManager.Instance.GetNavMeshSurface().ReBuildNavMesh;
-                    Debug.Log("Assegnato");
                 }
                 break;
             }

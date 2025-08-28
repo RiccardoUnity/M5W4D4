@@ -13,7 +13,7 @@ public class FSM_S_Patrol : FSM_BaseState
 
     private float _stoppingDistancePoint = 0.1f;
     private bool _hasDestination;
-    public bool GetHasDestination() => _hasDestination;
+    private bool GetHasDestination() => _hasDestination;
     public void SetHasDestinationFalse() => _hasDestination = false;
     [SerializeField] private EnterPointType _pointType = EnterPointType.None;
     public void SetEnterPointType(EnterPointType value) => _pointType = value;
@@ -94,7 +94,6 @@ public class FSM_S_Patrol : FSM_BaseState
         base.StateUpdate(time);
         if (_agent.remainingDistance <= _agent.stoppingDistance)
         {
-            _pointType = EnterPointType.Next;
             SetHasDestinationFalse();
             if (_fsmController.debug)
             {

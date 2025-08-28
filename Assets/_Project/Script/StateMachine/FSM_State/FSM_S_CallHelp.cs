@@ -10,8 +10,8 @@ public class FSM_S_CallHelp : FSM_BaseState
     private CharacterBrain _characterCalled;
     private int _count;
     private FSM_S_AnswerCallHelp _answerCallHelp;
-    private bool _closeCall;
-    private bool GetCloseCall() => _closeCall;
+    private bool _isCloseCall;
+    private bool GetIsCloseCall() => _isCloseCall;
 
     protected override void Awake()
     {
@@ -27,7 +27,7 @@ public class FSM_S_CallHelp : FSM_BaseState
 
         //Transizione: chiamate terminate --> Idle
         _transitions[0] = new FSM_Transition(_fsmController, NameState, 1, _fsmController.GetStateByName(GSM.GetStateIdle()));
-        _transitions[0].SetCondition(0, GetCloseCall, Logic.Equal, true);
+        _transitions[0].SetCondition(0, GetIsCloseCall, Logic.Equal, true);
 
         if (_fsmController.debug)
         {
@@ -40,7 +40,7 @@ public class FSM_S_CallHelp : FSM_BaseState
         base.StateEnter();
         _count = 0;
         _answerCallHelp = null;
-        _closeCall = false;
+        _isCloseCall = false;
     }
 
     public override void StateUpdate(float time)
@@ -51,7 +51,11 @@ public class FSM_S_CallHelp : FSM_BaseState
             //Qualcuno ha risposto
             if (_answerCallHelp != null)
             {
-                _closeCall = _answerCallHelp.SetDestination(this, _fsmController.GetSenseBrain().GetTargetV3());
+                _isCloseCall = _answerCallHelp.SetDestination(this, _fsmController.GetSenseBrain().GetTargetV3());
+                if (!_isCloseCall)
+                {
+                    _answerCallHelp = null;
+                }
                 if (_fsmController.debug)
                 {
                     Debug.Log($"Qualcuno ha risposto, inizio conversazione, {NameState}", this);
@@ -65,7 +69,7 @@ public class FSM_S_CallHelp : FSM_BaseState
                 //Non conosco nessun'altro, lascio stare
                 if (_characterCalled == null)
                 {
-                    _closeCall = true;
+                    _isCloseCall = true;
                     if (_fsmController.debug)
                     {
                         Debug.Log($"Nessun'altro da chiamare, {NameState}", this);

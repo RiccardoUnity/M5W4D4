@@ -83,7 +83,7 @@ public class Enemy_FSM_Controller : MonoBehaviour
         }
         if (debug)
         {
-            Debug.LogError($"Lo stato {name} non è stato trovato", gameObject);
+            Debug.LogWarning($"Lo stato {name} non è stato trovato", gameObject);
         }
         return null;
     }

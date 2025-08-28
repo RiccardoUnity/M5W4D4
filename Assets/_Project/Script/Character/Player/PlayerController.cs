@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     private RaycastHit _hit;
     private IEnumerator _runDestination;
 
+    private Quaternion _targetRotation;
+
     [Tooltip("Tempo per compiere un passo")]
     [Range(0.1f, 2f)]
     [SerializeField] private float _timeStep = 1f;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
     void OnDisable()
     {
         StopCoroutine(_runDestination);
+        _agent.isStopped = true;
     }
 
     private IEnumerator RunDestination()
@@ -48,11 +51,11 @@ public class PlayerController : MonoBehaviour
             //Movimento POSSIBILE tramite click del mouse
             if (_playerManager.GetMove() == Vector3.zero)
             {
-                //IMPORTANTE !!! - Ricordati di escludere il canvas in overlay
                 if (_playerManager.GetHasRay() && !_playerManager.GetCanvasOverload().IsPointerOnOverlay() && !InteractableSceneManager.Instance.GetIsGraphicRayCollider())
                 {
                     if (Physics.Raycast(_playerManager.GetRay(), out _hit))
                     {
+                        _agent.isStopped = false;
                         _agent.SetDestination(_hit.point);
                     }
                 }
@@ -60,7 +63,12 @@ public class PlayerController : MonoBehaviour
             //Movimento tramite tastiera
             else
             {
-                _agent.SetDestination(transform.position + _playerManager.GetMove() * _agent.speed);
+                _agent.isStopped = true;
+
+                _targetRotation = Quaternion.LookRotation(_playerManager.GetMove(), Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, _agent.angularSpeed * Time.deltaTime);
+
+                _agent.Move(_playerManager.GetMove() * (_agent.speed * Time.deltaTime));
             }
 
             //Un evento per ogni passo

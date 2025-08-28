@@ -9,7 +9,7 @@ public class Noise : MonoBehaviour
     private CharacterBrain _brain;
     private PlayerController _playerController;
     private EnemyHear _myHear;
-    private Distraction _distraction;
+    private SceneFade _distraction;
 
     private const float _maxIntensity_c = 15f;
     private const float _coeffErrorMaxIntensity_c = 5f;
@@ -35,7 +35,7 @@ public class Noise : MonoBehaviour
         _brain = GetComponent<CharacterBrain>();
         _playerController = GetComponentInParent<PlayerController>();
         _myHear = GetComponent<EnemyHear>();
-        _distraction = GetComponent<Distraction>();
+        _distraction = GetComponent<SceneFade>();
         if (_playerController != null)
         {
             _type = NoiseType.StepPlayer;

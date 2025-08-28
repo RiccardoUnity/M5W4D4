@@ -1,7 +1,7 @@
 using GM;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.AI;
 using GSM = GM.GameStaticManager;
 
 //Enemy ruota sul posto in base a degli intervalli, sensorialità media
@@ -25,10 +25,14 @@ public class FSM_S_Spin : FSM_BaseState
     private bool _isRotationCompleted;
     private bool IsRotationCompleted() => _isRotationCompleted;
 
+    private NavMeshAgent _agent;
+    private bool _isInStartDestination;
+
     protected override void Awake()
     {
         _detectionWidth = 0.25f;
         base.Awake();
+        _agent = GetComponentInParent<NavMeshAgent>();
         _startAngle = _fsmController.transform.eulerAngles.y;
         _useStep = true;
     }
@@ -59,28 +63,56 @@ public class FSM_S_Spin : FSM_BaseState
     public override void StateEnter()
     {
         base.StateEnter();
-        _currentAngle = _fsmController.transform.eulerAngles.y;
-        if (_useRandomAngle)
+        _agent.stoppingDistance = 0.1f;
+        _agent.SetDestination(_fsmController.GetStartPosition());
+    }
+
+    public override void StateUpdate(float time)
+    {
+        base.StateUpdate(time);
+        if (_isInStartDestination && _rotationUpdate == null)
         {
-            _endAngle = Random.Range(0f, _angleRotation);
-            _endAngle = _currentAngle + _endAngle * (_isClockwise ? 1 : -1);
+            _fsmController.transform.position = _fsmController.GetStartPosition();
+            _currentAngle = _fsmController.transform.eulerAngles.y;
+            if (_useRandomAngle)
+            {
+                _endAngle = Random.Range(0f, _angleRotation);
+                _endAngle = _currentAngle + _endAngle * (_isClockwise ? 1 : -1);
+            }
+            else
+            {
+                _endAngle = _startAngle + (_isClockwise ? _angleRotation : -_angleRotation);
+            }
+            StayIn360Degrees(ref _endAngle);
+            _isRotationCompleted = false;
+
+            _rotationUpdate = RotationUpdate();
+            StartCoroutine(_rotationUpdate);
         }
         else
         {
-            _endAngle = _startAngle + (_isClockwise ? _angleRotation : -_angleRotation);
+            if (_agent.remainingDistance <= _agent.stoppingDistance)
+            {
+                _isInStartDestination = true;
+            }
         }
-        StayIn360Degrees(ref _endAngle);
-        _isRotationCompleted = false;
+    }
 
-        if (_rotationUpdate == null)
+    public override void StateExit()
+    {
+        _stayInCoroutine = false;
+        if (_isPingPong)
         {
-            _rotationUpdate = RotationUpdate();
+            _isClockwise = !_isClockwise;
         }
-        StartCoroutine(_rotationUpdate);
+        _startAngle = _endAngle;
+        _isInStartDestination = false;
+        _isRotationCompleted = false;
     }
 
     private IEnumerator RotationUpdate()
     {
+        _stayInCoroutine = true;
         while (_stayInCoroutine)
         {
             yield return null;
@@ -104,22 +136,6 @@ public class FSM_S_Spin : FSM_BaseState
             Debug.Log($"Sei uscito dalla Coroutine di {NameState}", this);
         }
         _rotationUpdate = null;
-    }
-
-    public override void StateUpdate(float time)
-    {
-        base.StateUpdate(time);
-
-    }
-
-    public override void StateExit()
-    {
-        StopCoroutine(_rotationUpdate);
-        if (_isPingPong)
-        {
-            _isClockwise = !_isClockwise;
-        }
-        _startAngle = _endAngle;
     }
 
     //private void StayIn360Degrees(ref float angle) => angle += (angle > 360f ? -360f : (angle < 0f ? 360f : 0f));

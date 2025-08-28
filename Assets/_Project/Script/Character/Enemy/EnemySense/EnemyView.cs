@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 using GSM = GM.GameStaticManager;
 
@@ -33,7 +32,7 @@ public class EnemyView : MonoBehaviour
     private RaycastHit _hit;
     private LayerMask _layerMaskVisible = (1 << 0) | (1 << 3) | (1 << 6);
     private LayerMask _layerMaskCharacter = (1 << 3) | (1 << 6);
-    private LayerMask _layerMaskStatic = (1 << 0);
+    private int _layerDefault = 0;
     private QueryTriggerInteraction _qti = QueryTriggerInteraction.Ignore;
 
     private List<CharacterBrain> _meet = new List<CharacterBrain>();
@@ -41,7 +40,7 @@ public class EnemyView : MonoBehaviour
     [Header("Gizmos")]
     [SerializeField] private bool _useGizmos;
     private Color _orange = new Color(1f, 0.4f, 0f, 1f);
-    private Vector3[] _pointsCone = new Vector3[6];
+    private Vector3[] _pointsCone = new Vector3[12];
     [SerializeField] private float _angleDeltaY;
 
     void Awake()
@@ -65,7 +64,7 @@ public class EnemyView : MonoBehaviour
     {
         if (brain == _brain)
         {
-            _angleView = Mathf.Lerp(_angleMin, _angleMax, fill);
+            _angleView = Mathf.Lerp(_angleMax, _angleMin, fill);
             _cos = Mathf.Cos(_angleView * Mathf.PI / 360f);
 
             _distance = Mathf.Lerp(_distanceMin, _distanceMax, fill);
@@ -98,9 +97,9 @@ public class EnemyView : MonoBehaviour
                         {
                             if (Physics.Linecast(transform.position + _offset, _colliders[i].transform.position + _offset, out _hit, _layerMaskVisible, _qti))
                             {
-                                if (_hit.collider.gameObject.layer == _layerMaskStatic)
+                                if (_hit.collider.gameObject.layer == _layerDefault)
                                 {
-                                    Debug.Log("Il meet è dietro ad un muro");
+                                    //Debug.Log("Il meet è dietro ad un muro");
                                 }
                                 else
                                 {
@@ -134,16 +133,20 @@ public class EnemyView : MonoBehaviour
             {
                 x = Mathf.Cos(angleStart + angleRad * i) * _distance;
                 z = Mathf.Sin(angleStart + angleRad * i) * _distance;
-                _pointsCone[i] = transform.position + rotation * new Vector3(x, 1f, z);
+                _pointsCone[i] = transform.position + _offset + rotation * new Vector3(x, 0f, z);
+                if (Physics.Linecast(transform.position + _offset, _pointsCone[i], out _hit, (1 << 0), _qti))
+                {
+                    _pointsCone[i] = _hit.point;
+                }
             }
 
             Gizmos.color = _orange;
             for (int i = 0; i < _pointsCone.Length - 1; i++)
             {
                 Gizmos.DrawLine(_pointsCone[i], _pointsCone[i + 1]);
+                Gizmos.DrawLine(transform.position + _offset, _pointsCone[i]);
             }
-            Gizmos.DrawLine(transform.position + Vector3.up, _pointsCone[0]);
-            Gizmos.DrawLine(transform.position + Vector3.up, _pointsCone[_pointsCone.Length - 1]);
+            Gizmos.DrawLine(transform.position + _offset, _pointsCone[_pointsCone.Length - 1]);
         }
     }
 }

@@ -24,13 +24,13 @@ public class Door : MonoBehaviour
         if (_setCurrentPositionAsClosePosition)
         {
             _setCurrentPositionAsClosePosition = false;
-            _closePosition = transform.position;
+            _closePosition = transform.localPosition;
         }
 
         if (_setCurrentPositionAsOpenPosition)
         {
             _setCurrentPositionAsOpenPosition = false;
-            _openPosition = transform.position;
+            _openPosition = transform.localPosition;
         }
     }
 
@@ -56,26 +56,26 @@ public class Door : MonoBehaviour
         while (_isInAnimation)
         {
             _deltaMove = _directionToOpen * Time.deltaTime / _speedDoor;
-            transform.position += _deltaMove * ((_isOpen) ? -1f : 1f);
+            transform.localPosition += _deltaMove * ((_isOpen) ? -1f : 1f);
             yield return null;
 
             //Si sta aprendo
             if (_isOpen)
             {
-                _currentDistanceSqr = (transform.position - _closePosition).sqrMagnitude;
+                _currentDistanceSqr = (transform.localPosition - _closePosition).sqrMagnitude;
                 if (_currentDistanceSqr > _distanceSqr)
                 {
-                    transform.position = _openPosition;
+                    transform.localPosition = _openPosition;
                     _isInAnimation = false;
                 }
             }
             //Si sta chiudendo
             else
             {
-                _currentDistanceSqr = (transform.position - _openPosition).sqrMagnitude;
+                _currentDistanceSqr = (transform.localPosition - _openPosition).sqrMagnitude;
                 if (_currentDistanceSqr > _distanceSqr)
                 {
-                    transform.position = _closePosition;
+                    transform.localPosition = _closePosition;
                     _isInAnimation = false;
                 }
             }

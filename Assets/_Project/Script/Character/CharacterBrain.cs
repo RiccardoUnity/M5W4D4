@@ -76,6 +76,7 @@ public class CharacterBrain : MonoBehaviour
             yield return null;
             _timerCoroutine -= Time.deltaTime;
         }
+        _timerCoroutine = 0f;
         _internalTimer = null;
     }
 
@@ -122,7 +123,7 @@ public class CharacterBrain : MonoBehaviour
     //È più probabile che i character ad essere aggiunti alla lista siano anche i più vicini fisicamente
     public CharacterBrain GetEnemyKnow(int index)
     {
-        if (_metCharacters.Count > 0)
+        if (_metCharacters.Count > 0 && _metCharacters.Count < index)
         {
             return _metCharacters[index];
         }
