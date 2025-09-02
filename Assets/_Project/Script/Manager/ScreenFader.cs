@@ -3,21 +3,22 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SceneFade : MonoBehaviour
+public class ScreenFader : MonoBehaviour
 {
     #region Singleton
     private static int _count;
-    private static SceneFade _instance;
+    private static bool _isApplicationQuitting;
+    private static ScreenFader _instance;
 
-    public static SceneFade Instance
+    public static ScreenFader Instance
     {
         get
         {
-            if ( _instance == null )
+            if (_instance == null && !_isApplicationQuitting)
             {
-                GameObject gameObject = new GameObject("SceneFade - " + _count.ToString());
+                GameObject gameObject = new GameObject("ScreenFader - " + _count.ToString());
                 Debug.Log($"{gameObject.name} creato");
-                gameObject.AddComponent<SceneFade>();
+                gameObject.AddComponent<ScreenFader>();
                 ++_count;
             }
             return _instance;
@@ -89,6 +90,7 @@ public class SceneFade : MonoBehaviour
         {
             yield return null;
             _color.a += Time.deltaTime / _fadeSpeed * (_isFadeIn ? -1f : 1f);
+            _fadeImage.raycastTarget = (_isFadeIn ? false : true);
 
             if (_isFadeIn && _color.a < 0f)
             {
@@ -103,9 +105,13 @@ public class SceneFade : MonoBehaviour
             _fadeImage.color = _color;
         }
 
-        _fadeImage.raycastTarget = false;
         _isFadeIn = !_isFadeIn;
         _fade = null;
         onExit?.Invoke();
+    }
+
+    void OnApplicationQuit()
+    {
+        _isApplicationQuitting = true;
     }
 }

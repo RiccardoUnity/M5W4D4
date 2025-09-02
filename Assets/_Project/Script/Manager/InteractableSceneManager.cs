@@ -5,12 +5,13 @@ public class InteractableSceneManager : MonoBehaviour
 {
     #region Singleton
     private static int _count;
+    private static bool _isApplicationQuitting;
     private static InteractableSceneManager _instance;
     public static InteractableSceneManager Instance
     {
         get
         {
-            if (_instance == null)
+            if (_instance == null && !_isApplicationQuitting)
             {
                 GameObject gameObject = new GameObject("InteractableSceneManager - " + _count.ToString());
                 Debug.Log(gameObject.name + " creato");
@@ -49,6 +50,11 @@ public class InteractableSceneManager : MonoBehaviour
                 _instance.transform.parent = transform.parent;
             }
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        _isApplicationQuitting = true;
     }
     #endregion
 

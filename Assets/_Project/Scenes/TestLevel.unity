@@ -1007,6 +1007,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 3285736115717561942, guid: 17ca44ad222fc334ca377c82fc401ddc,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 4210343631922341806, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
       propertyPath: debug
@@ -1920,6 +1925,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -5104,6 +5114,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -13555,6 +13570,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -14628,6 +14648,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _victory: {fileID: 1980544905}
+  _gameOver: {fileID: 1130494040}
+  _chatEvent: {fileID: 2042633206}
 --- !u!1001 &786212355
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14904,6 +14926,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -15142,6 +15169,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 3285736115717561942, guid: 17ca44ad222fc334ca377c82fc401ddc,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 4210343631922341806, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
       propertyPath: debug
@@ -18894,6 +18926,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -24902,6 +24939,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 3285736115717561942, guid: 17ca44ad222fc334ca377c82fc401ddc,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 4210343631922341806, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
       propertyPath: debug
@@ -25077,6 +25119,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -25286,6 +25333,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -26061,6 +26113,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 3285736115717561942, guid: 17ca44ad222fc334ca377c82fc401ddc,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 4210343631922341806, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
       propertyPath: debug
@@ -27564,6 +27621,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -33027,6 +33089,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 141246750909643102, guid: 07a421a24f55e48488c6b78ea67df2f5,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 666992715854845300, guid: 07a421a24f55e48488c6b78ea67df2f5,
         type: 3}
       propertyPath: m_Name
@@ -33339,10 +33406,15 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 3285736115717561942, guid: 17ca44ad222fc334ca377c82fc401ddc,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 4210343631922341806, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
       propertyPath: debug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5256419003826300432, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
@@ -36212,6 +36284,11 @@ PrefabInstance:
       propertyPath: _playerController
       value: 
       objectReference: {fileID: 1568113246}
+    - target: {fileID: 3285736115717561942, guid: 17ca44ad222fc334ca377c82fc401ddc,
+        type: 3}
+      propertyPath: _ui_canvasOverlay
+      value: 
+      objectReference: {fileID: 775693315}
     - target: {fileID: 4210343631922341806, guid: 17ca44ad222fc334ca377c82fc401ddc,
         type: 3}
       propertyPath: debug

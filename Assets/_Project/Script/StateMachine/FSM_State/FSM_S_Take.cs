@@ -7,13 +7,13 @@ public class FSM_S_Take : FSM_BaseState
 {
     public override string NameState { get => GSM.GetStateTake(); }
 
-    [SerializeField] private GameObject _gameOverScreen;
+    [SerializeField] private UI_CanvasOverlay _ui_canvasOverlay;
     [SerializeField] private PlayerController _playerController;
     private CharacterBrain _characterBrain;
     private NavMeshAgent _agent;
 
     private float _distanceSqr;
-    private float _agentRadiusSqr;
+    private float _distanceSqrToTake;
 
     protected override void Awake()
     {
@@ -21,8 +21,8 @@ public class FSM_S_Take : FSM_BaseState
         base.Awake();
         _characterBrain = GetComponentInParent<CharacterBrain>();
         _agent = GetComponentInParent<NavMeshAgent>();
-        _agentRadiusSqr = (_agent.radius * 2f + 0.1f);
-        _agentRadiusSqr *= _agentRadiusSqr;
+        _distanceSqrToTake = (_agent.radius * 2f + 0.2f);
+        _distanceSqrToTake *= _distanceSqrToTake;
     }
 
     protected override void Start()
@@ -41,7 +41,7 @@ public class FSM_S_Take : FSM_BaseState
         _distanceSqr = (_playerController.transform.position - _fsmController.transform.position).sqrMagnitude;
         if (IsPlayerNear())
         {
-            _gameOverScreen.SetActive(true);
+            _ui_canvasOverlay.GameOver(_characterBrain.GetID());
             _playerController.enabled = false;
             EnemySceneManager.Instance.SwitchOffAllEnemy(_fsmController, _characterBrain.GetID());
         }
@@ -57,5 +57,5 @@ public class FSM_S_Take : FSM_BaseState
 
     }
 
-    private bool IsPlayerNear() => _distanceSqr < _agentRadiusSqr;
+    private bool IsPlayerNear() => _distanceSqr < _distanceSqrToTake;
 }

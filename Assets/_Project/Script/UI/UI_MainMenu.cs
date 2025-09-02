@@ -8,7 +8,7 @@ public class UI_MainMenu : MonoBehaviour
 {
     public void NewGame()
     {
-        SceneFade.Instance.StartFade(LoadNewGame);
+        ScreenFader.Instance.StartFade(LoadNewGame);
     }
 
     private void LoadNewGame()

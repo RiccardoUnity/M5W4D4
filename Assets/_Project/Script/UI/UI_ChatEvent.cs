@@ -204,6 +204,7 @@ public class UI_ChatEvent : MonoBehaviour
         _text = null;
         _answer.text = null;
         _timeInCoroutine = 0f;
+        gameObject.SetActive(true);
     }
 
     public void Exit(GameObject gameObject)

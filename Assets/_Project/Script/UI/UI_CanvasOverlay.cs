@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class UI_CanvasOverlay : MonoBehaviour
 {
     [SerializeField] private GameObject _victory;
+    [SerializeField] private GameObject _gameOver;
+    [SerializeField] private GameObject _chatEvent;
     private UI_Overlay[] _uiOverlays;
 
     private bool _isPointerOnOverlay;
@@ -30,7 +32,7 @@ public class UI_CanvasOverlay : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneFade.Instance.StartFade(LoadMainMenu);
+        ScreenFader.Instance.StartFade(LoadMainMenu);
     }
 
     private void LoadMainMenu()
@@ -40,7 +42,7 @@ public class UI_CanvasOverlay : MonoBehaviour
 
     public void TryAgain()
     {
-        SceneFade.Instance.StartFade(LoadCurrentScene);
+        ScreenFader.Instance.StartFade(LoadCurrentScene);
     }
 
     private void LoadCurrentScene()
@@ -52,5 +54,14 @@ public class UI_CanvasOverlay : MonoBehaviour
     {
         _victory.SetActive(true);
         EnemySceneManager.Instance.Victory(this);
+    }
+
+    public void GameOver(string id)
+    {
+        if (EnemySceneManager.Instance.IsEnemyIDValid(id))
+        {
+            _chatEvent.SetActive(false);
+            _gameOver.SetActive(true);
+        }
     }
 }

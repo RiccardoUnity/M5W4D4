@@ -6,12 +6,13 @@ public class EnemySceneManager : MonoBehaviour
 {
     #region Singleton
     private static int _count;
+    private static bool _isApplicationQuitting;
     private static EnemySceneManager _instance;
     public static EnemySceneManager Instance
     {
         get
         {
-            if (_instance == null)
+            if (_instance == null && !_isApplicationQuitting)
             {
                 GameObject gameObject = new GameObject("EnemySceneManager - " + _count.ToString());
                 Debug.Log(gameObject.name + " creato");
@@ -50,6 +51,11 @@ public class EnemySceneManager : MonoBehaviour
                 _instance.transform.parent = transform.parent;
             }
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        _isApplicationQuitting = true;
     }
     #endregion
 
@@ -140,7 +146,7 @@ public class EnemySceneManager : MonoBehaviour
         return false;
     }
 
-    //L'unica funzione che cambia questo valore è SwitchOffAllEnemy
+    //L'unica funzione che cambia questo valore deve essere SwitchOffAllEnemy
     private bool _generalSwich = true;
     public bool GetGeneralSwich() => _generalSwich;
     #endregion

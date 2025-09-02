@@ -108,6 +108,7 @@ public class Enemy_FSM_Controller : MonoBehaviour
     {
         //Risolve parecchi problemi, non cancellare per favore
         yield return null;
+
         float maxAlert = 0f;
         float deltaAlertBar = 0f;
         //"Update"
